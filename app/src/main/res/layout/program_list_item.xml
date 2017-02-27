@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:id="@+id/programListItem"
+    android:padding="6dp" >
+
+    <TextView
+        android:id="@+id/programListItemTitle"
+        android:textColor="#DD000000"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_toLeftOf="@+id/programListItemTime"
+        android:gravity="center_vertical"
+        android:text="Program"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/programListItemDesc"
+        android:textColor="#89000000"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/programListItemTitle"
+        android:layout_toLeftOf="@+id/programListItemDay"
+        android:ellipsize="marquee"
+        android:maxLines="1"
+        android:text="Description"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/programListItemDay"
+        android:textColor="#89000000"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/programListItemTitle"
+        android:layout_alignParentRight="true"
+        android:ellipsize="marquee"
+        android:maxLines="1"
+        android:text="Day"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/programListItemTime"
+        android:textColor="#89000000"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:ellipsize="marquee"
+        android:maxLines="1"
+        android:text="Time"
+        android:textSize="12sp" />
+
+</RelativeLayout>
