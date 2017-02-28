@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.NotificationCompat;
@@ -228,6 +230,24 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+
+        final IntentFilter intentFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+        final BecomingNoisyReceiver myNoisyAudioStreamReceiver = new BecomingNoisyReceiver();
+
+        MediaSessionCompat.Callback callback = new  // TODO call it sometime
+                MediaSessionCompat.Callback() {
+                    @Override
+                    public void onPlay() {
+                        registerReceiver(myNoisyAudioStreamReceiver, intentFilter);
+                    }
+
+                    @Override
+                    public void onStop() {
+                        unregisterReceiver(myNoisyAudioStreamReceiver);
+                    }
+                };
+
+
         // Configure the refreshing colors TODO this
         Globals.musicSwipeContainer.setColorSchemeResources(R.color.colorAccent);
 
@@ -251,7 +271,7 @@ public class MainActivity extends AppCompatActivity
         // Configure the refreshing colors
         Globals.programSwipeContainer.setColorSchemeResources(R.color.colorAccent);
 
-
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);  // the volume control is controlling the media playback, not he ringtone
 
     }
 
