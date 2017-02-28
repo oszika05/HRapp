@@ -72,6 +72,7 @@ public final class Globals {
     public static NotificationCompat.Builder notifBuilder;
     public static String musicTitle = "Hit Rádió Budapest";
     public static String musicDesc = "Több, mint zene!";
+    public static boolean restartNeeded = false;
 
 
     public final static int NOTIFICATION_ID = 1;
@@ -91,22 +92,34 @@ public final class Globals {
                     if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
                         // Permanent loss of audio focus
                         // Pause playback immediately
-                        stopRadio();
+                        if(playing) {
+                            stopRadio();
+                            restartNeeded = true;
+                        }
 
                         // Wait 30 seconds before stopping playback - not now
                     } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
                         // Pause playback
-                        stopRadio();
+                        if(playing) {
+                            stopRadio();
+                            restartNeeded = true;
+                        }
 
                     } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
                         // Lower the volume, keep playing
-                        mediaPlayer.setVolume(0.5f, 0.5f);
+                        if(playing) {
+                            mediaPlayer.setVolume(0.5f, 0.5f);
+                        }
 
                     } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
                         // Your app has been granted audio focus again
                         // Raise volume to normal, restart playback if necessary
-
-                        playRadio();    // starting the radio
+                        if (playing) {
+                            mediaPlayer.setVolume(1.0f, 1.0f);
+                        } else if (restartNeeded) { // only if the playback stopped because of gain loss
+                            playRadio();    // starting the radio
+                            restartNeeded = false;
+                        }
 
                     }
                 }
@@ -238,7 +251,11 @@ public final class Globals {
 
     public static void stopRadio() {    // TODO this
         mainActivity.stopService(Globals.radioServicePlayerIntent);
-
-        mainActivity.unregisterReceiver(myNoisyAudioStreamReceiver);
+        restartNeeded = false;
+        try {
+            mainActivity.unregisterReceiver(myNoisyAudioStreamReceiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 }

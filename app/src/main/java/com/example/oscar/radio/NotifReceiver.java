@@ -20,10 +20,9 @@ public class NotifReceiver extends BroadcastReceiver {
         // radioService.toggleStream();
 
         if(!Globals.playing) {
-            Globals.radioServicePlayerIntent = new Intent(Globals.mainActivity, radioPlayerService.class);
-            Globals.mainActivity.startService(Globals.radioServicePlayerIntent);
+            Globals.playRadio();
         } else {
-            Globals.mainActivity.stopService(Globals.radioServicePlayerIntent);
+            Globals.stopRadio();
         }
     }
 }
