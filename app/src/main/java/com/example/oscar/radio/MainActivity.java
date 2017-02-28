@@ -247,29 +247,6 @@ public class MainActivity extends AppCompatActivity
                 };
 */
 
-        AudioManager.OnAudioFocusChangeListener afChangeListener =
-                new AudioManager.OnAudioFocusChangeListener() {
-                    public void onAudioFocusChange(int focusChange) {
-                        if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
-                            // Permanent loss of audio focus
-                            // Pause playback immediately
-                            Log.d("VOLUME", "onAudioFocusChange: quick loss");
-
-                            // Wait 30 seconds before stopping playback
-                        } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
-                            // Pause playback
-                            Log.d("VOLUME", "onAudioFocusChange: loss");
-                        } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
-                            // Lower the volume, keep playing
-                            Log.d("VOLUME", "onAudioFocusChange: lower");
-                        } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-                            Log.d("VOLUME", "onAudioFocusChange: back to normal");
-                            // Your app has been granted audio focus again
-                            // Raise volume to normal, restart playback if necessary
-                        }
-                    }
-                };
-
 
         // Configure the refreshing colors TODO this
         Globals.musicSwipeContainer.setColorSchemeResources(R.color.colorAccent);

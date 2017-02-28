@@ -84,7 +84,34 @@ public final class Globals {
     public static Intent radioServicePlayerIntent;
 
     public static AudioManager am = null;
-    public static AudioManager.OnAudioFocusChangeListener afChangeListener;
+    //public static AudioManager.OnAudioFocusChangeListener afChangeListener;
+    public static AudioManager.OnAudioFocusChangeListener afChangeListener =
+            new AudioManager.OnAudioFocusChangeListener() {
+                public void onAudioFocusChange(int focusChange) {
+                    if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+                        // Permanent loss of audio focus
+                        // Pause playback immediately
+                        stopRadio();
+
+                        // Wait 30 seconds before stopping playback - not now
+                    } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
+                        // Pause playback
+                        stopRadio();
+
+                    } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
+                        // Lower the volume, keep playing
+                        mediaPlayer.setVolume(0.5f, 0.5f);
+
+                    } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+                        // Your app has been granted audio focus again
+                        // Raise volume to normal, restart playback if necessary
+
+                        playRadio();    // starting the radio
+
+                    }
+                }
+            };
+
     public static BecomingNoisyReceiver myNoisyAudioStreamReceiver;
 
 

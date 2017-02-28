@@ -39,6 +39,7 @@ public class radioPlayerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Globals.rPlayerService = this;
+        Globals.mediaPlayer = mediaPlayer;
 
         play();
 
@@ -67,6 +68,7 @@ public class radioPlayerService extends Service {
                 Globals.finishedLoading = true;
                 Globals.playing = true;
                 mediaPlayer.start();    // starting the player, when it finished preparing
+                mediaPlayer.setVolume(1.0f, 1.0f);
                 Globals.loadBar.dismiss();
             }
         });
