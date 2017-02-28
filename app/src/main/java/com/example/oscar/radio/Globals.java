@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -79,6 +80,9 @@ public final class Globals {
     public final static int TEN_SECONDS = 10000;
     public final static int ONE_HOUR = 60*60*ONE_SECOND;
     public static Intent radioServicePlayerIntent;
+
+    public static AudioManager am = (AudioManager) mainActivity.getSystemService(Context.AUDIO_SERVICE);
+    public static AudioManager.OnAudioFocusChangeListener afChangeListener;
 
 
     /**
@@ -174,5 +178,26 @@ public final class Globals {
         notifBuilder.setContentText(Text);
 
         rPlayerService.startForeground(Globals.NOTIFICATION_ID, notifBuilder.build());
+    }
+
+    public static void playRadio() {
+        // Request audio focus for playback
+        int result = am.requestAudioFocus(afChangeListener,
+                // Use the music stream.
+                AudioManager.STREAM_MUSIC,
+                // Request permanent focus.
+                AudioManager.AUDIOFOCUS_GAIN);
+
+        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+            // Start playback
+
+            Globals.radioServicePlayerIntent = new Intent(Globals.mainActivity, radioPlayerService.class);
+            mainActivity.startService(Globals.radioServicePlayerIntent);
+
+        }
+    }
+
+    public static pauseRadio() {    // TODO this
+        mainActivity.stopService(Globals.radioServicePlayerIntent);
     }
 }
