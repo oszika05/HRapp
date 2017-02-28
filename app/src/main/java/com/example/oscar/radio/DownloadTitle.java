@@ -1,15 +1,13 @@
 package com.example.oscar.radio;
 
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.view.View;
 
 import java.io.IOException;
 import java.net.URL;
 
 
-public class DownloadTitle extends AsyncTask<String, Void, String> {   // This is a long task, so we need to do it async
+class DownloadTitle extends AsyncTask<String, Void, String> {   // This is a long task, so we need to do it async
 
     @Override
     protected String doInBackground(String... urls) {   // get the artist and the title

@@ -1,12 +1,7 @@
 package com.example.oscar.radio;
 
-import android.util.Log;
 
-/**
- * Created by oszi on 2/4/17.
- */
-
-public final class CoverPhoto {
+final class CoverPhoto {
     public static int get(String musor, boolean forCard) {
 
         switch(musor) {

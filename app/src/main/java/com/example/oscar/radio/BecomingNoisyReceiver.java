@@ -4,11 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
-import android.util.Log;
 
-/**
- * Created by oszi on 2/28/17.
- */
 
 class BecomingNoisyReceiver extends BroadcastReceiver {
     @Override
