@@ -72,6 +72,7 @@ public final class Globals {
     public static String musicTitle = "Hit Rádió Budapest";
     public static String musicDesc = "Több, mint zene!";
 
+
     public final static int NOTIFICATION_ID = 1;
 
     public final static int ONE_SECOND = 1000;
@@ -197,7 +198,7 @@ public final class Globals {
         }
     }
 
-    public static pauseRadio() {    // TODO this
+    public static void stopRadio() {    // TODO this
         mainActivity.stopService(Globals.radioServicePlayerIntent);
     }
 }
