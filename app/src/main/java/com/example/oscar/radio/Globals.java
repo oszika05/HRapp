@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
@@ -82,8 +83,9 @@ public final class Globals {
     public final static int ONE_HOUR = 60*60*ONE_SECOND;
     public static Intent radioServicePlayerIntent;
 
-    public static AudioManager am = (AudioManager) mainActivity.getSystemService(Context.AUDIO_SERVICE);
+    public static AudioManager am = null;
     public static AudioManager.OnAudioFocusChangeListener afChangeListener;
+    public static BecomingNoisyReceiver myNoisyAudioStreamReceiver;
 
 
     /**
@@ -182,6 +184,9 @@ public final class Globals {
     }
 
     public static void playRadio() {
+        if(am == null)
+            am = (AudioManager) mainActivity.getSystemService(Context.AUDIO_SERVICE);
+
         // Request audio focus for playback
         int result = am.requestAudioFocus(afChangeListener,
                 // Use the music stream.
@@ -195,10 +200,18 @@ public final class Globals {
             Globals.radioServicePlayerIntent = new Intent(Globals.mainActivity, radioPlayerService.class);
             mainActivity.startService(Globals.radioServicePlayerIntent);
 
+
+            final IntentFilter intentFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+            myNoisyAudioStreamReceiver = new BecomingNoisyReceiver();
+
+            mainActivity.registerReceiver(myNoisyAudioStreamReceiver, intentFilter);
+
         }
     }
 
     public static void stopRadio() {    // TODO this
         mainActivity.stopService(Globals.radioServicePlayerIntent);
+
+        mainActivity.unregisterReceiver(myNoisyAudioStreamReceiver);
     }
 }

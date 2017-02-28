@@ -140,8 +140,7 @@ public class MainActivity extends AppCompatActivity
 
                     //Globals.radioService.startStream(Globals.errBar); // starting the stream
                     // TODO this + notification buttons
-                    Globals.radioServicePlayerIntent = new Intent(Globals.mainActivity, radioPlayerService.class);
-                    startService(Globals.radioServicePlayerIntent);
+                    Globals.playRadio();
 
                     //startNotification();    // showing the notification
 
@@ -150,7 +149,7 @@ public class MainActivity extends AppCompatActivity
                     fab.setImageResource(R.drawable.ic_pause_light);    // changing the icon of the fab button
                 } else {
                     Globals.loadBar.dismiss();
-                    stopService(Globals.radioServicePlayerIntent);  // stopping the service
+                    Globals.stopRadio();
                     //stopNotification();   // removing the notification
                     fab.setImageResource(R.drawable.ic_play_light);     // changing the icon of the fab button
                 }
@@ -230,7 +229,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-
+/* UNUSED
         final IntentFilter intentFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
         final BecomingNoisyReceiver myNoisyAudioStreamReceiver = new BecomingNoisyReceiver();
 
@@ -246,21 +245,25 @@ public class MainActivity extends AppCompatActivity
                         unregisterReceiver(myNoisyAudioStreamReceiver);
                     }
                 };
+*/
 
-        Handler mHandler = new Handler();
         AudioManager.OnAudioFocusChangeListener afChangeListener =
                 new AudioManager.OnAudioFocusChangeListener() {
                     public void onAudioFocusChange(int focusChange) {
                         if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
                             // Permanent loss of audio focus
                             // Pause playback immediately
+                            Log.d("VOLUME", "onAudioFocusChange: quick loss");
 
                             // Wait 30 seconds before stopping playback
                         } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
                             // Pause playback
+                            Log.d("VOLUME", "onAudioFocusChange: loss");
                         } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
                             // Lower the volume, keep playing
+                            Log.d("VOLUME", "onAudioFocusChange: lower");
                         } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+                            Log.d("VOLUME", "onAudioFocusChange: back to normal");
                             // Your app has been granted audio focus again
                             // Raise volume to normal, restart playback if necessary
                         }
