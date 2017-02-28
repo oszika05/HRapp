@@ -73,88 +73,88 @@ public class MainActivity extends AppCompatActivity
 
         // getting the saved values (also defaulting, if no config exist yet)
         SharedPreferences mPrefs = getSharedPreferences("asd", 0);
-        Globals.activeUrl = mPrefs.getInt("quality", 0);    // default: speech
-        Globals.alternateUrl = mPrefs.getBoolean("alternate", false);   // default: no alternative
-        Globals.url = Globals.urls[Globals.activeUrl + (Globals.alternateUrl ? 3 : 0)];
+        Globals.getInstance().getInstance().activeUrl = mPrefs.getInt("quality", 0);    // default: speech
+        Globals.getInstance().getInstance().alternateUrl = mPrefs.getBoolean("alternate", false);   // default: no alternative
+        Globals.getInstance().url = Globals.getInstance().urls[Globals.getInstance().activeUrl + (Globals.getInstance().alternateUrl ? 3 : 0)];
 
-        Globals.mainSwipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer_main);
-        if(Globals.isNetworkOnline())
-            Globals.mainSwipeContainer.setRefreshing(true); // the first init
-        Globals.mainSwipeContainer.setEnabled(true);
+        Globals.getInstance().mainSwipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer_main);
+        if(Globals.getInstance().isNetworkOnline())
+            Globals.getInstance().mainSwipeContainer.setRefreshing(true); // the first init
+        Globals.getInstance().mainSwipeContainer.setEnabled(true);
 
-        Globals.mainSwipeContainer.setColorSchemeResources(R.color.colorAccent);
+        Globals.getInstance().mainSwipeContainer.setColorSchemeResources(R.color.colorAccent);
 
-        Globals.titleText = (TextView) findViewById(R.id.title);
-        Globals.artistText = (TextView) findViewById(R.id.artist);
-        Globals.programText = (TextView) findViewById(R.id.programTitle);
-        Globals.programDescText = (TextView) findViewById(R.id.programDescription);
-        Globals.musicCardImage = (ImageView) findViewById(R.id.thumbnail_music);
-        Globals.programCardImage = (ImageView) findViewById(R.id.thumbnail_program);
-        Globals.musicCard = (CardView) findViewById(R.id.card_view_music);
-        Globals.programCard = (CardView) findViewById(R.id.card_view_program);
-        Globals.noInternetCard = (CardView) findViewById(R.id.card_view_nointernet);
+        Globals.getInstance().titleText = (TextView) findViewById(R.id.title);
+        Globals.getInstance().artistText = (TextView) findViewById(R.id.artist);
+        Globals.getInstance().programText = (TextView) findViewById(R.id.programTitle);
+        Globals.getInstance().programDescText = (TextView) findViewById(R.id.programDescription);
+        Globals.getInstance().musicCardImage = (ImageView) findViewById(R.id.thumbnail_music);
+        Globals.getInstance().programCardImage = (ImageView) findViewById(R.id.thumbnail_program);
+        Globals.getInstance().musicCard = (CardView) findViewById(R.id.card_view_music);
+        Globals.getInstance().programCard = (CardView) findViewById(R.id.card_view_program);
+        Globals.getInstance().noInternetCard = (CardView) findViewById(R.id.card_view_nointernet);
 
-        Globals.noInternetCard.setVisibility(Globals.isNetworkOnline() ? View.GONE : View.VISIBLE);
+        Globals.getInstance().noInternetCard.setVisibility(Globals.getInstance().isNetworkOnline() ? View.GONE : View.VISIBLE);
 
         Picasso.with(getApplicationContext()).load(R.drawable.internet2).into((ImageView)findViewById(R.id.thumbnail_nointernet));
 
-        Globals.finishedLoading = true;
+        Globals.getInstance().finishedLoading = true;
 
         //((NavigationView) findViewById(R.id.nav_view)).setItemBackgroundResource(R.drawable.cover_hitradio);
 
         toggleIntent = new Intent(this, NotifReceiver.class);
-        Globals.pIntent =  PendingIntent.getBroadcast(this, 0, toggleIntent, 0);;
+        Globals.getInstance().pIntent =  PendingIntent.getBroadcast(this, 0, toggleIntent, 0);;
 
         mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        Globals.mNotifyMgr = mNotifyMgr;
-        Globals.mBuilder = mBuilder;
+        Globals.getInstance().mNotifyMgr = mNotifyMgr;
+        Globals.getInstance().mBuilder = mBuilder;
 
-        Globals.fab = (FloatingActionButton) findViewById(R.id.fab);
-        if(Globals.playing)
-            Globals.fab.setImageResource(R.drawable.ic_pause_light);
+        Globals.getInstance().fab = (FloatingActionButton) findViewById(R.id.fab);
+        if(Globals.getInstance().playing)
+            Globals.getInstance().fab.setImageResource(R.drawable.ic_pause_light);
 
-        Globals.fab.setOnClickListener(new View.OnClickListener() {
+        Globals.getInstance().fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Globals.loadBar==null) { // init the snackbar
-                    Globals.loadBar = Snackbar.make(view, "Pufferelés...", Snackbar.LENGTH_INDEFINITE);
+                if(Globals.getInstance().loadBar==null) { // init the snackbar
+                    Globals.getInstance().loadBar = Snackbar.make(view, "Pufferelés...", Snackbar.LENGTH_INDEFINITE);
                 }
 
-                Globals.errBar = Snackbar.make(view, "Hiba! Ellenőrizze az internetkapcsolatát!", Snackbar.LENGTH_LONG);
+                Globals.getInstance().errBar = Snackbar.make(view, "Hiba! Ellenőrizze az internetkapcsolatát!", Snackbar.LENGTH_LONG);
 
                 FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
 
-                if (!Globals.playing) {
-                    if (!Globals.isNetworkOnline()) {
-                        Globals.errBar.show();
+                if (!Globals.getInstance().playing) {
+                    if (!Globals.getInstance().isNetworkOnline()) {
+                        Globals.getInstance().errBar.show();
                         return;
                     }
 
-                    if (Globals.programs.size()==0)
-                        Globals.radioService.downloadHtml();    // this refreshes the programs
+                    if (Globals.getInstance().programs.size()==0)
+                        Globals.getInstance().radioService.downloadHtml();    // this refreshes the programs
 
 
-                    if(!Globals.finishedLoading)
+                    if(!Globals.getInstance().finishedLoading)
                         return;
 
-                    //Globals.radioService.startStream(Globals.errBar); // starting the stream
+                    //Globals.getInstance().radioService.startStream(Globals.getInstance().errBar); // starting the stream
                     // TODO this + notification buttons
-                    Globals.playRadio();
+                    Globals.getInstance().playRadio();
 
                     //startNotification();    // showing the notification
 
-                    Globals.loadBar.show();     // showing snackbar
+                    Globals.getInstance().loadBar.show();     // showing snackbar
 
                     fab.setImageResource(R.drawable.ic_pause_light);    // changing the icon of the fab button
                 } else {
-                    Globals.loadBar.dismiss();
-                    Globals.stopRadio();
+                    Globals.getInstance().loadBar.dismiss();
+                    Globals.getInstance().stopRadio();
                     //stopNotification();   // removing the notification
                     fab.setImageResource(R.drawable.ic_play_light);     // changing the icon of the fab button
                 }
 
-                //Globals.radioService.setNotificationButton();
+                //Globals.getInstance().radioService.setNotificationButton();
             }
         });
 
@@ -209,9 +209,9 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        Globals.musicSwipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer_music);
+        Globals.getInstance().musicSwipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer_music);
         // Setup refresh listener which triggers new data loading
-        Globals.musicSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        Globals.getInstance().musicSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Your code to refresh the list here.
@@ -219,13 +219,13 @@ public class MainActivity extends AppCompatActivity
                 // once the network request has completed successfully.
 
                 try {
-                    if(Globals.isNetworkOnline())
-                        Globals.radioService.refreshSongsHTML();
-                    //Globals.musicAdapter.refresh();
+                    if(Globals.getInstance().isNetworkOnline())
+                        Globals.getInstance().radioService.refreshSongsHTML();
+                    //Globals.getInstance().musicAdapter.refresh();
                     //((MusicAdapter) songsListView.getAdapter()).refresh();
                 } catch (NullPointerException e) {  // TODO error
                     // this is ok
-                    Globals.musicSwipeContainer.setRefreshing(false);
+                    Globals.getInstance().musicSwipeContainer.setRefreshing(false);
                 }
             }
         });
@@ -249,11 +249,11 @@ public class MainActivity extends AppCompatActivity
 
 
         // Configure the refreshing colors TODO this
-        Globals.musicSwipeContainer.setColorSchemeResources(R.color.colorAccent);
+        Globals.getInstance().musicSwipeContainer.setColorSchemeResources(R.color.colorAccent);
 
-        Globals.programSwipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer_program);
+        Globals.getInstance().programSwipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer_program);
         // Setup refresh listener which triggers new data loading
-        Globals.programSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        Globals.getInstance().programSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Your code to refresh the list here.
@@ -261,26 +261,26 @@ public class MainActivity extends AppCompatActivity
                 // once the network request has completed successfully.
 
                 try {
-                    if(Globals.isNetworkOnline())
-                        Globals.radioService.downloadHtml();
+                    if(Globals.getInstance().isNetworkOnline())
+                        Globals.getInstance().radioService.downloadHtml();
                 } catch (NullPointerException e) {
-                    Globals.programSwipeContainer.setRefreshing(false);
+                    Globals.getInstance().programSwipeContainer.setRefreshing(false);
                 }
             }
         });
         // Configure the refreshing colors
-        Globals.programSwipeContainer.setColorSchemeResources(R.color.colorAccent);
+        Globals.getInstance().programSwipeContainer.setColorSchemeResources(R.color.colorAccent);
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);  // the volume control is controlling the media playback, not he ringtone
 
     }
 
     private void initOnce() {
-        Globals.mainActivity = this;
-        Globals.playing = false;
+        Globals.getInstance().mainActivity = this;
+        Globals.getInstance().playing = false;
 
         mBuilder = new NotificationCompat.Builder(this);
-        Globals.radioService = new RadioService();
+        Globals.getInstance().radioService = new RadioService();
     }
 
     @Override
@@ -304,24 +304,24 @@ public class MainActivity extends AppCompatActivity
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
         try {
-            Globals.playing = Globals.mediaPlayer.isPlaying();
+            Globals.getInstance().playing = Globals.getInstance().mediaPlayer.isPlaying();
         } catch (NullPointerException e) {
-            Globals.playing = false;
+            Globals.getInstance().playing = false;
         }
 
-        Globals.settingsFragment = new SettingsFragment();
+        Globals.getInstance().settingsFragment = new SettingsFragment();
 
-        if(!Globals.playing)
+        if(!Globals.getInstance().playing)
             initOnce();
         else
-            Globals.radioService = new RadioService();
+            Globals.getInstance().radioService = new RadioService();
 
         init();
 
-        if(!Globals.playing) {
-            Globals.radioService.refreshMetaData(); // this refreshes the metadata in every 2 sec
-            if(Globals.isNetworkOnline())
-                Globals.radioService.downloadHtml();    // this refreshes the programs
+        if(!Globals.getInstance().playing) {
+            Globals.getInstance().radioService.refreshMetaData(); // this refreshes the metadata in every 2 sec
+            if(Globals.getInstance().isNetworkOnline())
+                Globals.getInstance().radioService.downloadHtml();    // this refreshes the programs
         }
     }
 
@@ -373,9 +373,9 @@ public class MainActivity extends AppCompatActivity
 
             changeViewVisibility(R.id.t1);
         } else if (id == R.id.nav_program) {
-            if(!Globals.isNetworkOnline()) {
-                Globals.errBar = Snackbar.make(findViewById(R.id.drawer_layout), "Hiba! Ellenőrizze az internetkapcsolatát!", Snackbar.LENGTH_LONG);
-                Globals.errBar.show();
+            if(!Globals.getInstance().isNetworkOnline()) {
+                Globals.getInstance().errBar = Snackbar.make(findViewById(R.id.drawer_layout), "Hiba! Ellenőrizze az internetkapcsolatát!", Snackbar.LENGTH_LONG);
+                Globals.getInstance().errBar.show();
                 ((DrawerLayout) findViewById(R.id.drawer_layout)).closeDrawers();
                 return false;
             }
@@ -383,22 +383,22 @@ public class MainActivity extends AppCompatActivity
             String[] arr = {"Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"};
             // TODO
 
-            if(Globals.programs == null)
+            if(Globals.getInstance().programs == null)
                 return false;
 
-            for(int i=0; i<Globals.programs.size(); i++) {  // todo clickable days
-                Globals.programs.get(i).getName();
+            for(int i=0; i<Globals.getInstance().programs.size(); i++) {  // todo clickable days
+                Globals.getInstance().programs.get(i).getName();
             }
 
-            Globals.programAdapter = new ProgramAdapter(this, (ArrayList<Program>) Globals.programs);
+            Globals.getInstance().programAdapter = new ProgramAdapter(this, (ArrayList<Program>) Globals.getInstance().programs);
 
             ListView listView = (ListView) findViewById(R.id.program_list);
-            listView.setAdapter(Globals.programAdapter);
+            listView.setAdapter(Globals.getInstance().programAdapter);
 
-            if(Globals.programs.size() == 0) {  // the list is not yet loaded
-                Globals.programSwipeContainer.setRefreshing(true);  // the refreshing icon
+            if(Globals.getInstance().programs.size() == 0) {  // the list is not yet loaded
+                Globals.getInstance().programSwipeContainer.setRefreshing(true);  // the refreshing icon
 
-                Globals.radioService.downloadHtml();    // getting the programs
+                Globals.getInstance().radioService.downloadHtml();    // getting the programs
             }
 
 
@@ -408,22 +408,22 @@ public class MainActivity extends AppCompatActivity
 
             changeViewVisibility(R.id.t3);
         } else if (id == R.id.nav_music) {
-            if(!Globals.isNetworkOnline()) {
-                Globals.errBar = Snackbar.make(findViewById(R.id.drawer_layout), "Hiba! Ellenőrizze az internetkapcsolatát!", Snackbar.LENGTH_LONG);
-                Globals.errBar.show();
+            if(!Globals.getInstance().isNetworkOnline()) {
+                Globals.getInstance().errBar = Snackbar.make(findViewById(R.id.drawer_layout), "Hiba! Ellenőrizze az internetkapcsolatát!", Snackbar.LENGTH_LONG);
+                Globals.getInstance().errBar.show();
                 ((DrawerLayout) findViewById(R.id.drawer_layout)).closeDrawers();
                 return false;
             }
 
-            Globals.musicAdapter = new MusicAdapter(getApplicationContext(), (ArrayList<MusicTitle>) Globals.songs);
+            Globals.getInstance().musicAdapter = new MusicAdapter(getApplicationContext(), (ArrayList<MusicTitle>) Globals.getInstance().songs);
 
             songsListView = (ListView) findViewById(R.id.music_list);
-            songsListView.setAdapter(Globals.musicAdapter);
+            songsListView.setAdapter(Globals.getInstance().musicAdapter);
 
-            if(Globals.songs.size() == 0) {  // the list is not yet loaded TODO no internet
-                Globals.musicSwipeContainer.setRefreshing(true);  // the refreshing icon
+            if(Globals.getInstance().songs.size() == 0) {  // the list is not yet loaded TODO no internet
+                Globals.getInstance().musicSwipeContainer.setRefreshing(true);  // the refreshing icon
 
-                Globals.radioService.refreshSongsHTML();
+                Globals.getInstance().radioService.refreshSongsHTML();
             }
 
             changeViewVisibility(R.id.t4);
@@ -477,12 +477,12 @@ public class MainActivity extends AppCompatActivity
 
 
         NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        mNotifyMgr.notify(Globals.NOTIFICATION_ID, mBuilder.build());
+        mNotifyMgr.notify(Globals.getInstance().NOTIFICATION_ID, mBuilder.build());
     }
 
     public void stopNotification() {
         NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        mNotifyMgr.cancel(Globals.NOTIFICATION_ID);
+        mNotifyMgr.cancel(Globals.getInstance().NOTIFICATION_ID);
     }
     
     private void changeViewVisibility(int id) {

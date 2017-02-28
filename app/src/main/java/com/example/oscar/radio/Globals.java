@@ -27,16 +27,29 @@ import java.util.List;
  * Created by oszi on 2/4/17.
  */
 
-public final class Globals {
-    public static MainActivity mainActivity;    // TODO this is bad
-    public static SettingsFragment settingsFragment;
-    public static RadioService radioService;
-    public static radioPlayerService rPlayerService;
-    public static MediaPlayer mediaPlayer; // the mediaPlayer
-    public static NotificationCompat.Builder mBuilder;
-    public static boolean playing;
-    public static String url;
-    public static String[] urls = {
+class Globals {
+    private static Globals instance = null;
+
+    protected Globals() {
+    }
+
+    public static Globals getInstance() {
+        if(instance == null) {
+            instance = new Globals();
+        }
+
+        return instance;
+    }
+
+    public MainActivity mainActivity;    // TODO this is bad
+    public SettingsFragment settingsFragment;
+    public RadioService radioService;
+    public radioPlayerService rPlayerService;
+    public MediaPlayer mediaPlayer; // the mediaPlayer
+    public NotificationCompat.Builder mBuilder;
+    public boolean playing;
+    public String url;
+    public String[] urls = {
             "http://live7.hit.hu:8080/speech",  // low
             "http://live7.hit.hu:8080/low",     // mid
             "http://live7.hit.hu:8080/high",    // high
@@ -44,49 +57,49 @@ public final class Globals {
             "http://194.38.107.136:8080/low",   // alternate mid
             "http://194.38.107.136:8080/high"  // alternate high
     };
-    public static int activeUrl;
-    public static boolean alternateUrl;
-    public static PendingIntent pIntent;
-    public static NotificationManager mNotifyMgr;
-    public static Handler handler = new Handler();
-    public static TextView titleText;
-    public static TextView artistText;
-    public static TextView programText;
-    public static TextView programDescText;
-    public static FloatingActionButton fab;
-    public static boolean finishedLoading;
-    public static Snackbar loadBar;
-    public static Snackbar errBar;
-    public static CardView musicCard;
-    public static CardView programCard;
-    public static CardView noInternetCard;
-    public static List<Program> programs = new ArrayList<Program>();
-    public static List<MusicTitle> songs = new ArrayList<MusicTitle>();
-    public static MusicAdapter musicAdapter;
-    public static ProgramAdapter programAdapter;
-    public static SwipeRefreshLayout musicSwipeContainer;
-    public static SwipeRefreshLayout programSwipeContainer;
-    public static SwipeRefreshLayout mainSwipeContainer;
-    public static ImageView musicCardImage;
-    public static ImageView programCardImage;
-    public static NotificationCompat.Builder notifBuilder;
-    public static String musicTitle = "Hit Rádió Budapest";
-    public static String musicDesc = "Több, mint zene!";
-    public static boolean restartNeeded = false;
+    public int activeUrl;
+    public boolean alternateUrl;
+    public PendingIntent pIntent;
+    public NotificationManager mNotifyMgr;
+    public Handler handler = new Handler();
+    public TextView titleText;
+    public TextView artistText;
+    public TextView programText;
+    public TextView programDescText;
+    public FloatingActionButton fab;
+    public boolean finishedLoading;
+    public Snackbar loadBar;
+    public Snackbar errBar;
+    public CardView musicCard;
+    public CardView programCard;
+    public CardView noInternetCard;
+    public List<Program> programs = new ArrayList<Program>();
+    public List<MusicTitle> songs = new ArrayList<MusicTitle>();
+    public MusicAdapter musicAdapter;
+    public  ProgramAdapter programAdapter;
+    public SwipeRefreshLayout musicSwipeContainer;
+    public SwipeRefreshLayout programSwipeContainer;
+    public SwipeRefreshLayout mainSwipeContainer;
+    public ImageView musicCardImage;
+    public ImageView programCardImage;
+    public NotificationCompat.Builder notifBuilder;
+    public String musicTitle = "Hit Rádió Budapest";
+    public String musicDesc = "Több, mint zene!";
+    public boolean restartNeeded = false;
 
 
-    public final static int NOTIFICATION_ID = 1;
+    public final int NOTIFICATION_ID = 1;
 
-    public final static int ONE_SECOND = 1000;
-    public final static int TWO_SECONDS = 2000;
-    public final static int SEVEN_SECONDS = 7000;
-    public final static int TEN_SECONDS = 10000;
-    public final static int ONE_HOUR = 60*60*ONE_SECOND;
-    public static Intent radioServicePlayerIntent;
+    public final int ONE_SECOND = 1000;
+    public final int TWO_SECONDS = 2000;
+    public final int SEVEN_SECONDS = 7000;
+    public final int TEN_SECONDS = 10000;
+    public final int ONE_HOUR = 60*60*ONE_SECOND;
+    public Intent radioServicePlayerIntent;
 
-    public static AudioManager am = null;
+    public AudioManager am = null;
     //public static AudioManager.OnAudioFocusChangeListener afChangeListener;
-    public static AudioManager.OnAudioFocusChangeListener afChangeListener =
+    public AudioManager.OnAudioFocusChangeListener afChangeListener =
             new AudioManager.OnAudioFocusChangeListener() {
                 public void onAudioFocusChange(int focusChange) {
                     if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
@@ -125,7 +138,7 @@ public final class Globals {
                 }
             };
 
-    public static BecomingNoisyReceiver myNoisyAudioStreamReceiver;
+    public BecomingNoisyReceiver myNoisyAudioStreamReceiver;
 
 
     /**
@@ -133,7 +146,7 @@ public final class Globals {
      * @param title If the song's title
      * @return  If it's valid it returns with true
      */
-    public static boolean validSongTitle(String title) {
+    public boolean validSongTitle(String title) {
         switch(title) {
             case "Hírek":
             case "REGGELI MUSORVEZETO":
@@ -148,10 +161,10 @@ public final class Globals {
         }
     }
 
-    public static void setUrl(int index) {
+    public void setUrl(int index) {
         try {
             url = urls[index + ((alternateUrl) ? 3 : 0)];
-            if(Globals.playing && activeUrl != index)
+            if(playing && activeUrl != index)
                 radioService.restartStream();
 
             activeUrl = index;
@@ -162,10 +175,10 @@ public final class Globals {
         }
     }
 
-    public static void setUrl(boolean alternate) {
+    public void setUrl(boolean alternate) {
         try {
             url = urls[activeUrl + ((alternate) ? 3 : 0)];
-            if(Globals.playing && alternate != alternateUrl)
+            if(playing && alternate != alternateUrl)
                 radioService.restartStream();
 
             alternateUrl = alternate;
@@ -176,7 +189,7 @@ public final class Globals {
         }
     }
 
-    public static boolean isNetworkOnline() {
+    public boolean isNetworkOnline() {
         ConnectivityManager cm =
                 (ConnectivityManager)mainActivity.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -187,7 +200,7 @@ public final class Globals {
 
     }
 
-    public static void buildNotification(Context ctx) {
+    public void buildNotification(Context ctx) {
         Intent notificationIntent = new Intent(ctx, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(ctx, 0, notificationIntent, 0);
 
@@ -199,31 +212,31 @@ public final class Globals {
                 .setContentIntent(pendingIntent);
 
 
-        rPlayerService.startForeground(Globals.NOTIFICATION_ID, notifBuilder.build());
+        rPlayerService.startForeground(NOTIFICATION_ID, notifBuilder.build());
     }
 
-    public static void setNotifButton(boolean play) {
+    public void setNotifButton(boolean play) {
         notifBuilder.mActions.clear();
 
         if(play) {
-            notifBuilder.addAction(R.drawable.ic_pause, "Pause", Globals.pIntent);
+            notifBuilder.addAction(R.drawable.ic_pause, "Pause", pIntent);
             notifBuilder.setSmallIcon(R.drawable.ic_play);
         } else {
-            notifBuilder.addAction(R.drawable.ic_play, "Play", Globals.pIntent);
+            notifBuilder.addAction(R.drawable.ic_play, "Play", pIntent);
             notifBuilder.setSmallIcon(R.drawable.ic_pause);
         }
 
-        rPlayerService.startForeground(Globals.NOTIFICATION_ID, notifBuilder.build());
+        rPlayerService.startForeground(NOTIFICATION_ID, notifBuilder.build());
     }
 
-    public static void setNotifText(String Title, String Text) {
+    public void setNotifText(String Title, String Text) {
         notifBuilder.setContentTitle(Title);
         notifBuilder.setContentText(Text);
 
-        rPlayerService.startForeground(Globals.NOTIFICATION_ID, notifBuilder.build());
+        rPlayerService.startForeground(NOTIFICATION_ID, notifBuilder.build());
     }
 
-    public static void playRadio() {
+    public void playRadio() {
         if(am == null)
             am = (AudioManager) mainActivity.getSystemService(Context.AUDIO_SERVICE);
 
@@ -237,8 +250,8 @@ public final class Globals {
         if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
             // Start playback
 
-            Globals.radioServicePlayerIntent = new Intent(Globals.mainActivity, radioPlayerService.class);
-            mainActivity.startService(Globals.radioServicePlayerIntent);
+            radioServicePlayerIntent = new Intent(mainActivity, radioPlayerService.class);
+            mainActivity.startService(radioServicePlayerIntent);
 
 
             final IntentFilter intentFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
@@ -249,8 +262,8 @@ public final class Globals {
         }
     }
 
-    public static void stopRadio() {    // TODO this
-        mainActivity.stopService(Globals.radioServicePlayerIntent);
+    public void stopRadio() {    // TODO this
+        mainActivity.stopService(radioServicePlayerIntent);
         restartNeeded = false;
         try {
             mainActivity.unregisterReceiver(myNoisyAudioStreamReceiver);

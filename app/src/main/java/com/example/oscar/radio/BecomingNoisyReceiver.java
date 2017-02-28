@@ -15,7 +15,7 @@ class BecomingNoisyReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intent.getAction())) {
             // Pause the playback
-            Globals.mainActivity.stopService(Globals.radioServicePlayerIntent);  // stopping the service
+            Globals.getInstance().mainActivity.stopService(Globals.getInstance().radioServicePlayerIntent);  // stopping the service
         }
     }
 }

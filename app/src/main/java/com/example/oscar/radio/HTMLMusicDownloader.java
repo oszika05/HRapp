@@ -44,7 +44,7 @@ public class HTMLMusicDownloader extends AsyncTask<Void, Void, List<MusicTitle>>
             Elements line = document.select("div.mline_line");
 
             for (int i = 0; i < line.size(); i++) {   // Monday
-                if (Globals.validSongTitle(line.get(i).select("div.mline_song").text())) {
+                if (Globals.getInstance().validSongTitle(line.get(i).select("div.mline_song").text())) {
                     parseMusic(line.get(i), songs);
                 }
             }
@@ -58,12 +58,12 @@ public class HTMLMusicDownloader extends AsyncTask<Void, Void, List<MusicTitle>>
 
     @Override
     protected void onPostExecute(final List<MusicTitle> songs){
-        Globals.mainActivity.runOnUiThread(new Runnable() {
+        Globals.getInstance().mainActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Globals.songs = songs;
-                    Globals.musicAdapter.refresh();
+                    Globals.getInstance().songs = songs;
+                    Globals.getInstance().musicAdapter.refresh();
 
                 } catch (NullPointerException e) {
                     e.printStackTrace();
@@ -72,7 +72,7 @@ public class HTMLMusicDownloader extends AsyncTask<Void, Void, List<MusicTitle>>
         });
 
         try {
-            Globals.musicSwipeContainer.setRefreshing(false);
+            Globals.getInstance().musicSwipeContainer.setRefreshing(false);
         } catch (NullPointerException e) {
             // it's ok
         }

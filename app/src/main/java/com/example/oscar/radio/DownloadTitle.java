@@ -35,9 +35,9 @@ public class DownloadTitle extends AsyncTask<String, Void, String> {   // This i
     }
 
     private Program now() {
-        for(int i=0; i<Globals.programs.size(); i++)
-            if (Globals.programs.get(i).isPlayingNow())
-                return Globals.programs.get(i);
+        for(int i=0; i<Globals.getInstance().programs.size(); i++)
+            if (Globals.getInstance().programs.get(i).isPlayingNow())
+                return Globals.getInstance().programs.get(i);
 
         return null;
     }
@@ -49,30 +49,30 @@ public class DownloadTitle extends AsyncTask<String, Void, String> {   // This i
             currentProgram = new Program();
         }
 
-        if(s == null || s.length() == 0 || (!Globals.validSongTitle(s) && Globals.songs.size()==0)) {
+        if(s == null || s.length() == 0 || (!Globals.getInstance().validSongTitle(s) && Globals.getInstance().songs.size()==0)) {
 
-            Globals.musicTitle = currentProgram.getName();
-            Globals.musicDesc = currentProgram.getType();     // If there is no music title in the metadata
-            if(Globals.musicCard!=null)
-                Globals.musicCard.setVisibility(View.GONE);     // hide the music card
+            Globals.getInstance().musicTitle = currentProgram.getName();
+            Globals.getInstance().musicDesc = currentProgram.getType();     // If there is no music title in the metadata
+            if(Globals.getInstance().musicCard!=null)
+                Globals.getInstance().musicCard.setVisibility(View.GONE);     // hide the music card
 
         } else {
             try {
-                if (!Globals.validSongTitle(s)) {     // setting the notification title from the sound history
-                    Globals.musicTitle = Globals.songs.get(0).getTitle() +
-                            " - " + Globals.songs.get(0).getArtist();
-                    Globals.musicDesc = currentProgram.getName();
+                if (!Globals.getInstance().validSongTitle(s)) {     // setting the notification title from the sound history
+                    Globals.getInstance().musicTitle = Globals.getInstance().songs.get(0).getTitle() +
+                            " - " + Globals.getInstance().songs.get(0).getArtist();
+                    Globals.getInstance().musicDesc = currentProgram.getName();
 
-                    Globals.artistText.setText(Globals.songs.get(0).getArtist());
-                    Globals.titleText.setText(Globals.songs.get(0).getTitle());
+                    Globals.getInstance().artistText.setText(Globals.getInstance().songs.get(0).getArtist());
+                    Globals.getInstance().titleText.setText(Globals.getInstance().songs.get(0).getTitle());
 
                 } else {
-                    Globals.musicTitle =  s;
-                    Globals.musicDesc = currentProgram.getName();
+                    Globals.getInstance().musicTitle =  s;
+                    Globals.getInstance().musicDesc = currentProgram.getName();
 
                     if (s.contains("-")) {  // just to be sure :)
-                        Globals.artistText.setText(s.substring(0, s.indexOf("-"))); // this is the main View
-                        Globals.titleText.setText(s.substring(s.indexOf("-") + 2)); // +1 for the '-' and an other one for the ' '
+                        Globals.getInstance().artistText.setText(s.substring(0, s.indexOf("-"))); // this is the main View
+                        Globals.getInstance().titleText.setText(s.substring(s.indexOf("-") + 2)); // +1 for the '-' and an other one for the ' '
                     }
                 }
 
@@ -82,21 +82,21 @@ public class DownloadTitle extends AsyncTask<String, Void, String> {   // This i
 
 
             try {
-                Globals.musicCard.setVisibility(View.VISIBLE);  // display the music card
-                Globals.noInternetCard.setVisibility(View.GONE);    // hide the noInternet card
-                Globals.mainSwipeContainer.setRefreshing(false);    // the loading is finished
-                Globals.mainSwipeContainer.setEnabled(false);
+                Globals.getInstance().musicCard.setVisibility(View.VISIBLE);  // display the music card
+                Globals.getInstance().noInternetCard.setVisibility(View.GONE);    // hide the noInternet card
+                Globals.getInstance().mainSwipeContainer.setRefreshing(false);    // the loading is finished
+                Globals.getInstance().mainSwipeContainer.setEnabled(false);
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
         }
 
-        Globals.setNotifText(Globals.musicTitle, Globals.musicDesc);
+        Globals.getInstance().setNotifText(Globals.getInstance().musicTitle, Globals.getInstance().musicDesc);
 
 
-        HTMLDownloader.setProgramCard(Globals.programs);
+        HTMLDownloader.setProgramCard(Globals.getInstance().programs);
 
-        if(Globals.artistText == null ||Globals. titleText == null || Globals.programText == null) {
+        if(Globals.getInstance().artistText == null ||Globals.getInstance(). titleText == null || Globals.getInstance().programText == null) {
             return;
         }
 

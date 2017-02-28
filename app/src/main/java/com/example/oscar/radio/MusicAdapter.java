@@ -90,7 +90,7 @@ public class MusicAdapter extends BaseAdapter {
     }
 
     public void refresh() {
-        searchArrayList = (ArrayList<MusicTitle>) Globals.songs;
+        searchArrayList = (ArrayList<MusicTitle>) Globals.getInstance().songs;
 
         notifyDataSetChanged();
     }

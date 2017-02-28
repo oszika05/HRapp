@@ -18,8 +18,6 @@ import java.io.IOException;
 
 import java.net.URL;
 
-import static com.example.oscar.radio.Globals.mainActivity;
-
 
 public class RadioService extends Service {
 
@@ -40,102 +38,102 @@ public class RadioService extends Service {
 
 
     public void setNotificationButton() {
-        Globals.mBuilder.mActions.clear();
-        if(Globals.playing) {
-            Globals.mBuilder.addAction(R.drawable.ic_pause, "Pause", Globals.pIntent);
-            Globals.mBuilder.setOngoing(true);
-            Globals.mBuilder.setSmallIcon(R.drawable.ic_play);
+        Globals.getInstance().mBuilder.mActions.clear();
+        if(Globals.getInstance().playing) {
+            Globals.getInstance().mBuilder.addAction(R.drawable.ic_pause, "Pause", Globals.getInstance().getInstance().getInstance().pIntent);
+            Globals.getInstance().mBuilder.setOngoing(true);
+            Globals.getInstance().mBuilder.setSmallIcon(R.drawable.ic_play);
 
-            Globals.fab.setImageResource(R.drawable.ic_pause_light);
+            Globals.getInstance().fab.setImageResource(R.drawable.ic_pause_light);
         } else {
-            Globals.mBuilder.addAction(R.drawable.ic_play, "Play", Globals.pIntent);
-            Globals.mBuilder.setOngoing(false);
-            Globals.mBuilder.setSmallIcon(R.drawable.ic_pause);
+            Globals.getInstance().mBuilder.addAction(R.drawable.ic_play, "Play", Globals.getInstance().pIntent);
+            Globals.getInstance().mBuilder.setOngoing(false);
+            Globals.getInstance().mBuilder.setSmallIcon(R.drawable.ic_pause);
 
-            Globals.fab.setImageResource(R.drawable.ic_play_light);
+            Globals.getInstance().fab.setImageResource(R.drawable.ic_play_light);
         }
 
-        Globals.mNotifyMgr.notify(Globals.NOTIFICATION_ID, Globals.mBuilder.build());
+        Globals.getInstance().mNotifyMgr.notify(Globals.getInstance().NOTIFICATION_ID, Globals.getInstance().mBuilder.build());
     }
 
     public boolean startStream(final Snackbar errBar) {
 
-        Globals.playing = true;
-        Globals.finishedLoading = false;
+        Globals.getInstance().playing = true;
+        Globals.getInstance().finishedLoading = false;
 
         try {
-            Globals.mediaPlayer = new MediaPlayer();
-            Globals.mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            Globals.mediaPlayer.setDataSource(Globals.url);
-            Globals.mediaPlayer.prepareAsync(); // might take long! (for buffering, etc) <- that's why it's async
+            Globals.getInstance().mediaPlayer = new MediaPlayer();
+            Globals.getInstance().mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            Globals.getInstance().mediaPlayer.setDataSource(Globals.getInstance().url);
+            Globals.getInstance().mediaPlayer.prepareAsync(); // might take long! (for buffering, etc) <- that's why it's async
 
-            Globals.handler.postDelayed(new Runnable() {
+            Globals.getInstance().handler.postDelayed(new Runnable() {
                 public void run() {
-                    if(!Globals.finishedLoading) {
+                    if(!Globals.getInstance().finishedLoading) {
                         //loadBar.dismiss();
                         errBar.show();
                     }
                 }
-            }, Globals.SEVEN_SECONDS);
+            }, Globals.getInstance().SEVEN_SECONDS);
 
 
-            new DownloadTitle().execute(Globals.url);   // get the meta from the stream
+            new DownloadTitle().execute(Globals.getInstance().url);   // get the meta from the stream
         } catch (IOException e) {
             errBar.show();
-            Globals.playing = false;
+            Globals.getInstance().playing = false;
             e.printStackTrace();
         }
 
-        Globals.mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+        Globals.getInstance().mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
-                Globals.finishedLoading = true;
-                Globals.playing = true;
+                Globals.getInstance().finishedLoading = true;
+                Globals.getInstance().playing = true;
                 mediaPlayer.start();    // starting the player, when it finished preparing
-                Globals.loadBar.dismiss();
+                Globals.getInstance().loadBar.dismiss();
             }
         });
 
-        return Globals.playing;
+        return Globals.getInstance().playing;
     }
 
     public boolean startStream() {
-        Globals.playing = true;
+        Globals.getInstance().playing = true;
 
         try {
-            Globals.mediaPlayer = new MediaPlayer();
-            Globals.mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            Globals.mediaPlayer.setDataSource(Globals.url);
-            Globals.mediaPlayer.prepareAsync(); // might take long! (for buffering, etc) <- that's why it's async
+            Globals.getInstance().mediaPlayer = new MediaPlayer();
+            Globals.getInstance().mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            Globals.getInstance().mediaPlayer.setDataSource(Globals.getInstance().url);
+            Globals.getInstance().mediaPlayer.prepareAsync(); // might take long! (for buffering, etc) <- that's why it's async
 
-            new DownloadTitle().execute(Globals.url);   // get the meta from the stream
+            new DownloadTitle().execute(Globals.getInstance().url);   // get the meta from the stream
         } catch (IOException e) {
 
-            Globals.playing = false;
+            Globals.getInstance().playing = false;
             e.printStackTrace();
 
-            Log.d("DBG", "startStream: Playing: " + Globals.playing);
+            Log.d("DBG", "startStream: Playing: " + Globals.getInstance().playing);
         }
 
-        Globals.mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+        Globals.getInstance().mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
                 mediaPlayer.start();    // starting the player, when it finished preparing
             }
         });
 
-        return Globals.playing;
+        return Globals.getInstance().playing;
     }
 
     public boolean stopStream() {
-        if(Globals.mediaPlayer==null)
-            return Globals.playing;
+        if(Globals.getInstance().mediaPlayer==null)
+            return Globals.getInstance().playing;
 
-        Globals.playing = false;
-        Globals.loadBar.dismiss();
-        Globals.mediaPlayer.release();
-        Globals.mediaPlayer = null;
-        return Globals.playing;
+        Globals.getInstance().playing = false;
+        Globals.getInstance().loadBar.dismiss();
+        Globals.getInstance().mediaPlayer.release();
+        Globals.getInstance().mediaPlayer = null;
+        return Globals.getInstance().playing;
     }
 
     public void restartStream() {
@@ -147,42 +145,42 @@ public class RadioService extends Service {
 
     public boolean toggleStream() {
 
-        if(Globals.playing)
-            Globals.playing = stopStream();
+        if(Globals.getInstance().playing)
+            Globals.getInstance().playing = stopStream();
         else
-            Globals.playing = startStream();
+            Globals.getInstance().playing = startStream();
 
         setNotificationButton();
 
-        return Globals.playing;
+        return Globals.getInstance().playing;
     }
 
     public void refreshMetaData() {
 
-        if(Globals.playing)
+        if(Globals.getInstance().playing)
             try {
-                if(Globals.isNetworkOnline())
-                    new DownloadTitle().execute(Globals.url);
+                if(Globals.getInstance().isNetworkOnline())
+                    new DownloadTitle().execute(Globals.getInstance().url);
             } catch (NullPointerException e) {
                 // it's ok
             }
 
-        Globals.handler.postDelayed(new Runnable() {
+        Globals.getInstance().handler.postDelayed(new Runnable() {
             @Override
             public void run() {
 
-                if(Globals.playing) {
+                if(Globals.getInstance().playing) {
                     try {
-                        if(Globals.isNetworkOnline())
-                            new DownloadTitle().execute(Globals.url);
+                        if(Globals.getInstance().isNetworkOnline())
+                            new DownloadTitle().execute(Globals.getInstance().url);
                     } catch (NullPointerException e) {
                         // It's ok'
                     }
                 }
 
-                Globals.handler.postDelayed(this, Globals.TEN_SECONDS);
+                Globals.getInstance().handler.postDelayed(this, Globals.getInstance().TEN_SECONDS);
             }
-        }, Globals.TEN_SECONDS);
+        }, Globals.getInstance().TEN_SECONDS);
     }
 
     public void downloadHtml() {
@@ -206,7 +204,7 @@ public class RadioService extends Service {
     public void onDestroy() {
         // stop the notification
         NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        mNotifyMgr.cancel(Globals.NOTIFICATION_ID);
+        mNotifyMgr.cancel(Globals.getInstance().NOTIFICATION_ID);
 
         super.onDestroy();
     }

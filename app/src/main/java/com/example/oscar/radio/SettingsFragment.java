@@ -81,8 +81,8 @@ public class SettingsFragment extends PreferenceFragment {
                 ListPreference listPreference = (ListPreference) preference;
                 int index = listPreference.findIndexOfValue(stringValue);
 
-                Globals.setUrl(index); // TODO fix settings
-                SharedPreferences mPrefs = Globals.mainActivity.getSharedPreferences("asd", 0);
+                Globals.getInstance().setUrl(index); // TODO fix settings
+                SharedPreferences mPrefs = Globals.getInstance().mainActivity.getSharedPreferences("asd", 0);
                 SharedPreferences.Editor mEditor = mPrefs.edit();
                 mEditor.putInt("quality", index).apply();
 
@@ -118,9 +118,9 @@ public class SettingsFragment extends PreferenceFragment {
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
                 //preference.setSummary(stringValue);
-                Globals.setUrl(stringValue.equals("true"));
+                Globals.getInstance().setUrl(stringValue.equals("true"));
 
-                SharedPreferences mPrefs = Globals.mainActivity.getSharedPreferences("asd", 0);
+                SharedPreferences mPrefs = Globals.getInstance().mainActivity.getSharedPreferences("asd", 0);
                 SharedPreferences.Editor mEditor = mPrefs.edit();
                 mEditor.putBoolean("alternate", stringValue.equals("true")).apply();
 

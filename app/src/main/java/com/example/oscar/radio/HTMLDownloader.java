@@ -73,16 +73,16 @@ public class HTMLDownloader extends AsyncTask<Void, Void, List<Program>> {
     protected void onPostExecute(final List<Program> programs){
 
         HTMLDownloader.setProgramCard(programs);
-        Globals.noInternetCard.setVisibility(View.GONE); // hide noInternet card
-        Globals.programCard.setVisibility(View.VISIBLE);    // show programcard
+        Globals.getInstance().noInternetCard.setVisibility(View.GONE); // hide noInternet card
+        Globals.getInstance().programCard.setVisibility(View.VISIBLE);    // show programcard
 
-        Globals.mainActivity.runOnUiThread(new Runnable() {
+        Globals.getInstance().mainActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Globals.programs = programs;
-                    //Globals.programAdapter.notifyDataSetChanged();
-                    Globals.programAdapter.refresh();
+                    Globals.getInstance().programs = programs;
+                    //Globals.getInstance().programAdapter.notifyDataSetChanged();
+                    Globals.getInstance().programAdapter.refresh();
 
                 } catch (NullPointerException e) {
                     e.printStackTrace();
@@ -91,10 +91,10 @@ public class HTMLDownloader extends AsyncTask<Void, Void, List<Program>> {
         });
 
         try {
-            Globals.programSwipeContainer.setRefreshing(false);
-            Globals.noInternetCard.setVisibility(View.GONE);
-            Globals.mainSwipeContainer.setRefreshing(false);    // the loading is finished
-            Globals.mainSwipeContainer.setEnabled(false);
+            Globals.getInstance().programSwipeContainer.setRefreshing(false);
+            Globals.getInstance().noInternetCard.setVisibility(View.GONE);
+            Globals.getInstance().mainSwipeContainer.setRefreshing(false);    // the loading is finished
+            Globals.getInstance().mainSwipeContainer.setEnabled(false);
         } catch (NullPointerException e) {
             // it's ok
         }
@@ -104,7 +104,7 @@ public class HTMLDownloader extends AsyncTask<Void, Void, List<Program>> {
 
     public static void setProgramCard(final List<Program> programs) {
         try {
-            Globals.programCard.setOnClickListener(new View.OnClickListener() {
+            Globals.getInstance().programCard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Program curr = null;
@@ -149,12 +149,12 @@ public class HTMLDownloader extends AsyncTask<Void, Void, List<Program>> {
             }
 
             // set the program
-            Globals.programText.setText(curr.getName());
-            Globals.programDescText.setText(curr.getType());
-            //Globals.programCardImage.setImageResource(CoverPhoto.get(curr.getName(), true));
-            Picasso.with(Globals.mainActivity.getApplicationContext()).load(
+            Globals.getInstance().programText.setText(curr.getName());
+            Globals.getInstance().programDescText.setText(curr.getType());
+            //Globals.getInstance().programCardImage.setImageResource(CoverPhoto.get(curr.getName(), true));
+            Picasso.with(Globals.getInstance().mainActivity.getApplicationContext()).load(
                     CoverPhoto.get(curr.getName(), true)).into(
-                    (ImageView)Globals.mainActivity.findViewById(R.id.thumbnail_program)
+                    (ImageView)Globals.getInstance().mainActivity.findViewById(R.id.thumbnail_program)
             );
         } catch (NullPointerException e) {
             e.printStackTrace();

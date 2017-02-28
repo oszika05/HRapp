@@ -19,10 +19,10 @@ public class NotifReceiver extends BroadcastReceiver {
         // toggle the music playback
         // radioService.toggleStream();
 
-        if(!Globals.playing) {
-            Globals.playRadio();
+        if(!Globals.getInstance().playing) {
+            Globals.getInstance().playRadio();
         } else {
-            Globals.stopRadio();
+            Globals.getInstance().stopRadio();
         }
     }
 }

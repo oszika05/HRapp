@@ -16,8 +16,6 @@ import android.widget.RemoteViews;
 
 import java.io.IOException;
 
-import static com.example.oscar.radio.Globals.mainActivity;
-
 
 /**
  * Created by oszi on 2/17/17.
@@ -38,8 +36,8 @@ public class radioPlayerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Globals.rPlayerService = this;
-        Globals.mediaPlayer = mediaPlayer;
+        Globals.getInstance().rPlayerService = this;
+        Globals.getInstance().mediaPlayer = mediaPlayer;
 
         play();
 
@@ -54,9 +52,9 @@ public class radioPlayerService extends Service {
 
     private void play() {
         try {
-            Globals.finishedLoading = false;
+            Globals.getInstance().finishedLoading = false;
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mediaPlayer.setDataSource(Globals.url);
+            mediaPlayer.setDataSource(Globals.getInstance().url);
             mediaPlayer.prepareAsync(); // might take long! (for buffering, etc) <- that's why it's async
         } catch (IOException e) {
             e.printStackTrace();
@@ -65,40 +63,40 @@ public class radioPlayerService extends Service {
         mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
-                Globals.finishedLoading = true;
-                Globals.playing = true;
+                Globals.getInstance().finishedLoading = true;
+                Globals.getInstance().playing = true;
                 mediaPlayer.start();    // starting the player, when it finished preparing
                 mediaPlayer.setVolume(1.0f, 1.0f);
-                Globals.loadBar.dismiss();
+                Globals.getInstance().loadBar.dismiss();
             }
         });
 
         startForegroundNotification();
 
-        Globals.fab.setImageResource(R.drawable.ic_pause_light);
+        Globals.getInstance().fab.setImageResource(R.drawable.ic_pause_light);
     }
 
     private void stop() {
-        Globals.playing = false;
-        Globals.loadBar.dismiss();
+        Globals.getInstance().playing = false;
+        Globals.getInstance().loadBar.dismiss();
 
         mediaPlayer.stop();
         mediaPlayer.release();
         mediaPlayer = null;
 
 
-        Globals.fab.setImageResource(R.drawable.ic_play_light);
+        Globals.getInstance().fab.setImageResource(R.drawable.ic_play_light);
 
-        Globals.setNotifButton(false);
+        Globals.getInstance().setNotifButton(false);
         stopForeground(false);
-        Globals.notifBuilder.setOngoing(false);
-        Globals.notifBuilder.setSmallIcon(R.drawable.ic_pause);
-        Globals.mNotifyMgr.notify(Globals.NOTIFICATION_ID, Globals.notifBuilder.build());
+        Globals.getInstance().notifBuilder.setOngoing(false);
+        Globals.getInstance().notifBuilder.setSmallIcon(R.drawable.ic_pause);
+        Globals.getInstance().mNotifyMgr.notify(Globals.getInstance().NOTIFICATION_ID, Globals.getInstance().notifBuilder.build());
     }
 
     public void startForegroundNotification() {
-        Globals.buildNotification(this);
-        Globals.setNotifButton(true);
+        Globals.getInstance().buildNotification(this);
+        Globals.getInstance().setNotifButton(true);
     }
 
 
@@ -112,7 +110,7 @@ public class radioPlayerService extends Service {
 
     private Notification assembleNotif() {
         String ns = Context.NOTIFICATION_SERVICE;
-        Context ctx = Globals.mainActivity;
+        Context ctx = Globals.getInstance().mainActivity;
         mNotificationManager = (NotificationManager) ctx.getSystemService(ns);
         CharSequence tickerText = "Shortcuts";
         long when = System.currentTimeMillis();
@@ -128,14 +126,14 @@ public class radioPlayerService extends Service {
         //set the button listeners
         // setListeners(contentView);
         //radio listener
-        Intent radio = new Intent(Globals.mainActivity, NotifReceiver.class);
-        PendingIntent pRadio = PendingIntent.getActivity(mainActivity, 0, radio, 0);
+        Intent radio = new Intent(Globals.getInstance().mainActivity, NotifReceiver.class);
+        PendingIntent pRadio = PendingIntent.getActivity(Globals.getInstance().mainActivity, 0, radio, 0);
         contentView.setOnClickPendingIntent(R.id.radio, pRadio);
 
         notification.contentView = contentView;
         notification.flags |= Notification.FLAG_ONGOING_EVENT;
         CharSequence contentTitle = "From Shortcuts";
-        //mNotificationManager.notify(Globals.NOTIFICATION_ID, notification);
+        //mNotificationManager.notify(Globals.getInstance().NOTIFICATION_ID, notification);
         return notification;
 
 

@@ -11,6 +11,6 @@ public class SettingsS extends PreferenceActivity {
 
         // Display the fragment as the main content
         getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, Globals.settingsFragment).commit();
+                .replace(android.R.id.content, Globals.getInstance().settingsFragment).commit();
     }
 }

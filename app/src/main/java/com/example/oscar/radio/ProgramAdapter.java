@@ -88,7 +88,7 @@ public class ProgramAdapter extends BaseAdapter {
     }
 
     public void refresh() {
-        searchArrayList = (ArrayList<Program>) Globals.programs;
+        searchArrayList = (ArrayList<Program>) Globals.getInstance().programs;
 
         notifyDataSetChanged();
     }
