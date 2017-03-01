@@ -82,7 +82,12 @@ public class HTMLDownloader extends AsyncTask<Void, Void, List<Program>> {
                 try {
                     Globals.getInstance().programs = programs;
                     //Globals.getInstance().programAdapter.notifyDataSetChanged();
-                    Globals.getInstance().programAdapter.refresh();
+                    for(int i=0; i<7; ++i) {
+                        if(Globals.getInstance().programAdapter[i] != null) {
+                            Globals.getInstance().programAdapter[i].refresh();
+                            Log.d("ASD", "run: imhere: " + i);
+                        }
+                    }
 
                 } catch (NullPointerException e) {
                     e.printStackTrace();

@@ -63,9 +63,12 @@ public class ProgramFragment extends Fragment {
             }
         }
 
-        Globals.getInstance().programAdapter = new ProgramAdapter(Globals.getInstance().mainActivity, perDay, day);
+        Globals.getInstance().programAdapter[day - 1] = new ProgramAdapter(Globals.getInstance().mainActivity, perDay, list, day);
 
-        list.setAdapter(Globals.getInstance().programAdapter);
+        list.setAdapter(Globals.getInstance().programAdapter[day - 1]);
+        
+        Globals.getInstance().programAdapter[Globals.getInstance().getDay() - 1].goToCurrItem();
+
 
         if(Globals.getInstance().programs.size() == 0) {  // the list is not yet loaded
             Globals.getInstance().programSwipeContainer[day - 1].setRefreshing(true);  // the refreshing icon

@@ -14,6 +14,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity
     public static Intent toggleIntent;
     public static PendingIntent pToggleIntent;
     public static NotificationManager mNotifyMgr;
-    private static ListView songsListView;
+    private static ListView songsListView;  // TODO fix this
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -60,9 +61,10 @@ public class MainActivity extends AppCompatActivity
 
         // getting the saved values (also defaulting, if no config exist yet)
         SharedPreferences mPrefs = getSharedPreferences("asd", 0);
-        Globals.getInstance().getInstance().activeUrl = mPrefs.getInt("quality", 0);    // default: speech
-        Globals.getInstance().getInstance().alternateUrl = mPrefs.getBoolean("alternate", false);   // default: no alternative
+        Globals.getInstance().activeUrl = mPrefs.getInt("quality", 0);    // default: speech
+        Globals.getInstance().alternateUrl = mPrefs.getBoolean("alternate", false);   // default: no alternative
         Globals.getInstance().url = Globals.getInstance().urls[Globals.getInstance().activeUrl + (Globals.getInstance().alternateUrl ? 3 : 0)];
+
 
         Globals.getInstance().appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
 
@@ -352,24 +354,23 @@ public class MainActivity extends AppCompatActivity
             String[] dayArr = {"Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"};
             // TODO
 
-            TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-            tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+            Globals.getInstance().tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+            Globals.getInstance().tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
             // Removing tabs
-            tabLayout.removeAllTabs();
+            Globals.getInstance().tabLayout.removeAllTabs();
             // Adding Tabs
             for (String tab_name : dayArr) {
-                tabLayout.addTab(tabLayout.newTab().setText(tab_name));
+                Globals.getInstance().tabLayout.addTab(Globals.getInstance().tabLayout.newTab().setText(tab_name));
             }
-
 
 
             final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
             final TabsPagerAdapter adapter = new TabsPagerAdapter
                     (getSupportFragmentManager());
             viewPager.setAdapter(adapter);
-            viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-            tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(Globals.getInstance().tabLayout));
+            Globals.getInstance().tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
                     viewPager.setCurrentItem(tab.getPosition());
@@ -385,6 +386,12 @@ public class MainActivity extends AppCompatActivity
 
                 }
             });
+
+            try {
+                Globals.getInstance().tabLayout.getTabAt(Globals.getInstance().getDay() - 1).select();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
 
 
 
@@ -505,7 +512,7 @@ public class MainActivity extends AppCompatActivity
             if (id == R.id.t2) {
                 Globals.getInstance().appBarLayout.setElevation(0.0f);
             } else {
-                Globals.getInstance().appBarLayout.setElevation(6.0f);
+                Globals.getInstance().appBarLayout.setElevation(10.5f); // the original value
             }
         }
 

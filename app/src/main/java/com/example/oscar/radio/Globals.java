@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.CardView;
@@ -22,6 +23,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -77,7 +80,7 @@ class Globals {
     public List<Program> programs = new ArrayList<Program>();
     public List<MusicTitle> songs = new ArrayList<MusicTitle>();
     public MusicAdapter musicAdapter;
-    public  ProgramAdapter programAdapter;
+    public ProgramAdapter programAdapter[] = new ProgramAdapter[7];
     public SwipeRefreshLayout musicSwipeContainer;
     public SwipeRefreshLayout programSwipeContainer[] = new SwipeRefreshLayout[7];
     public SwipeRefreshLayout mainSwipeContainer;
@@ -88,6 +91,7 @@ class Globals {
     public String musicDesc = "Több, mint zene!";
     public boolean restartNeeded = false;
     public AppBarLayout appBarLayout;
+    public TabLayout tabLayout;
 
 
     public final int NOTIFICATION_ID = 1;
@@ -141,6 +145,20 @@ class Globals {
             };
 
     public BecomingNoisyReceiver myNoisyAudioStreamReceiver;
+
+
+    public int getDay() {
+        Date now = new Date();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(now);
+        int day = calendar.get(Calendar.DAY_OF_WEEK); // the day of the week in numerical format
+
+        if (--day == 0)
+            day = 7;
+
+        return day;
+    }
 
 
     /**

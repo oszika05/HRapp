@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,13 +20,16 @@ import static android.support.v4.content.ContextCompat.startActivity;
 public class ProgramAdapter extends BaseAdapter {
     private ArrayList<Program> searchArrayList;
     private int day;
+    private ListView list;
+    private static boolean first = true;
 
     private LayoutInflater mInflater;
 
-    public ProgramAdapter(Context context, ArrayList<Program> results, int day) {
+    public ProgramAdapter(Context context, ArrayList<Program> results, ListView list, int day) {
         searchArrayList = results;
         mInflater = LayoutInflater.from(context);
         this.day = day;
+        this.list = list;
     }
 
     public int getCount() {
@@ -99,5 +103,23 @@ public class ProgramAdapter extends BaseAdapter {
         }
 
         notifyDataSetChanged();
+
+        if(first) {
+            goToCurrItem();
+        }
+    }
+
+    public void goToCurrItem() {    // TODO this
+        if(!first) return;
+
+        first = false;
+        Log.d("E S E M É N Y", "goToCurrItem: ESEMÉNY!");
+        for(int i=0; i<searchArrayList.size(); ++i) {
+            if(searchArrayList.get(i).isPlayingNow()) {
+                list.smoothScrollToPosition(list.getMaxScrollAmount());
+                Log.d("DAAY", "goToCurrItem: " + day);
+                return;
+            }
+        }
     }
 }
