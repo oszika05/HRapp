@@ -11,6 +11,7 @@ import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -78,7 +79,7 @@ class Globals {
     public MusicAdapter musicAdapter;
     public  ProgramAdapter programAdapter;
     public SwipeRefreshLayout musicSwipeContainer;
-    public SwipeRefreshLayout programSwipeContainer;
+    public SwipeRefreshLayout programSwipeContainer[] = new SwipeRefreshLayout[7];
     public SwipeRefreshLayout mainSwipeContainer;
     public ImageView musicCardImage;
     public ImageView programCardImage;
@@ -86,6 +87,7 @@ class Globals {
     public String musicTitle = "Hit Rádió Budapest";
     public String musicDesc = "Több, mint zene!";
     public boolean restartNeeded = false;
+    public AppBarLayout appBarLayout;
 
 
     public final int NOTIFICATION_ID = 1;

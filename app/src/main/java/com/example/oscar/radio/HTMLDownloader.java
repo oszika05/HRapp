@@ -91,11 +91,15 @@ public class HTMLDownloader extends AsyncTask<Void, Void, List<Program>> {
         });
 
         try {
-            Globals.getInstance().programSwipeContainer.setRefreshing(false);
+            for(int i=0; i<7; ++i) {
+                if(Globals.getInstance().programSwipeContainer[i] != null)
+                    Globals.getInstance().programSwipeContainer[i].setRefreshing(false);
+            }
             Globals.getInstance().noInternetCard.setVisibility(View.GONE);
             Globals.getInstance().mainSwipeContainer.setRefreshing(false);    // the loading is finished
             Globals.getInstance().mainSwipeContainer.setEnabled(false);
         } catch (NullPointerException e) {
+            e.printStackTrace();
             // it's ok
         }
     }

@@ -17,13 +17,15 @@ import java.util.ArrayList;
 import static android.support.v4.content.ContextCompat.startActivity;
 
 public class ProgramAdapter extends BaseAdapter {
-    private static ArrayList<Program> searchArrayList;
+    private ArrayList<Program> searchArrayList;
+    private int day;
 
     private LayoutInflater mInflater;
 
-    public ProgramAdapter(Context context, ArrayList<Program> results) {
+    public ProgramAdapter(Context context, ArrayList<Program> results, int day) {
         searchArrayList = results;
         mInflater = LayoutInflater.from(context);
+        this.day = day;
     }
 
     public int getCount() {
@@ -88,7 +90,13 @@ public class ProgramAdapter extends BaseAdapter {
     }
 
     public void refresh() {
-        searchArrayList = (ArrayList<Program>) Globals.getInstance().programs;
+        searchArrayList.clear();
+
+        for(int i=0; i<Globals.getInstance().programs.size(); i++) {
+            if(Globals.getInstance().programs.get(i).getDay() == day) {
+                searchArrayList.add(Globals.getInstance().programs.get(i));
+            }
+        }
 
         notifyDataSetChanged();
     }

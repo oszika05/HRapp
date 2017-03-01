@@ -1,21 +1,22 @@
 package com.example.oscar.radio;
 
+import android.app.ActionBar;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.media.session.MediaSessionCompat;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.CardView;
 import android.util.Log;
@@ -28,32 +29,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.media.MediaPlayer;
 import android.media.AudioManager;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import static com.example.oscar.radio.R.id.imageView;
 
 
 public class MainActivity extends AppCompatActivity
@@ -76,6 +63,8 @@ public class MainActivity extends AppCompatActivity
         Globals.getInstance().getInstance().activeUrl = mPrefs.getInt("quality", 0);    // default: speech
         Globals.getInstance().getInstance().alternateUrl = mPrefs.getBoolean("alternate", false);   // default: no alternative
         Globals.getInstance().url = Globals.getInstance().urls[Globals.getInstance().activeUrl + (Globals.getInstance().alternateUrl ? 3 : 0)];
+
+        Globals.getInstance().appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
 
         Globals.getInstance().mainSwipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer_main);
         if(Globals.getInstance().isNetworkOnline())
@@ -251,26 +240,6 @@ public class MainActivity extends AppCompatActivity
         // Configure the refreshing colors TODO this
         Globals.getInstance().musicSwipeContainer.setColorSchemeResources(R.color.colorAccent);
 
-        Globals.getInstance().programSwipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer_program);
-        // Setup refresh listener which triggers new data loading
-        Globals.getInstance().programSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // Your code to refresh the list here.
-                // Make sure you call swipeContainer.setRefreshing(false)
-                // once the network request has completed successfully.
-
-                try {
-                    if(Globals.getInstance().isNetworkOnline())
-                        Globals.getInstance().radioService.downloadHtml();
-                } catch (NullPointerException e) {
-                    Globals.getInstance().programSwipeContainer.setRefreshing(false);
-                }
-            }
-        });
-        // Configure the refreshing colors
-        Globals.getInstance().programSwipeContainer.setColorSchemeResources(R.color.colorAccent);
-
         setVolumeControlStream(AudioManager.STREAM_MUSIC);  // the volume control is controlling the media playback, not he ringtone
 
     }
@@ -380,9 +349,49 @@ public class MainActivity extends AppCompatActivity
                 return false;
             }
 
-            String[] arr = {"Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"};
+            String[] dayArr = {"Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat", "Vasárnap"};
             // TODO
 
+            TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+            tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+            // Removing tabs
+            tabLayout.removeAllTabs();
+            // Adding Tabs
+            for (String tab_name : dayArr) {
+                tabLayout.addTab(tabLayout.newTab().setText(tab_name));
+            }
+
+
+
+            final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+            final TabsPagerAdapter adapter = new TabsPagerAdapter
+                    (getSupportFragmentManager());
+            viewPager.setAdapter(adapter);
+            viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+            tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    viewPager.setCurrentItem(tab.getPosition());
+                }
+
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+
+                }
+            });
+
+
+
+
+            changeViewVisibility(R.id.t2);
+
+/*
             if(Globals.getInstance().programs == null)
                 return false;
 
@@ -403,7 +412,7 @@ public class MainActivity extends AppCompatActivity
 
 
             changeViewVisibility(R.id.t2);
-
+*/
         } else if (id == R.id.nav_contact) {
 
             changeViewVisibility(R.id.t3);
@@ -491,6 +500,14 @@ public class MainActivity extends AppCompatActivity
         findViewById(R.id.t2).setVisibility(View.GONE);
         findViewById(R.id.t3).setVisibility(View.GONE);
         findViewById(R.id.t4).setVisibility(View.GONE);
+
+        if(Build.VERSION.SDK_INT >= 21 && Globals.getInstance().appBarLayout != null) {
+            if (id == R.id.t2) {
+                Globals.getInstance().appBarLayout.setElevation(0.0f);
+            } else {
+                Globals.getInstance().appBarLayout.setElevation(6.0f);
+            }
+        }
 
         findViewById(id).setVisibility(View.VISIBLE);
     }
