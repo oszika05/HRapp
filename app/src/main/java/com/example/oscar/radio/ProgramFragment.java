@@ -57,7 +57,7 @@ public class ProgramFragment extends Fragment {
         if(Globals.getInstance().programs == null)
             return rootView;
 
-        for(int i=0; i<Globals.getInstance().programs.size(); i++) {  // todo clickable days
+        for(int i=0; i<Globals.getInstance().programs.size(); i++) {
             if (Globals.getInstance().programs.get(i).getDay() == day) {
                 perDay.add(Globals.getInstance().programs.get(i));
             }
@@ -69,13 +69,13 @@ public class ProgramFragment extends Fragment {
         
         Globals.getInstance().programAdapter[Globals.getInstance().getDay() - 1].goToCurrItem();
 
-
+/*
         if(Globals.getInstance().programs.size() == 0) {  // the list is not yet loaded
             Globals.getInstance().programSwipeContainer[day - 1].setRefreshing(true);  // the refreshing icon
 
             Globals.getInstance().radioService.downloadHtml();    // getting the programs
         }
-
+*/
 
         return rootView;
     }

@@ -16,6 +16,7 @@ public class Textactivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(Globals.getInstance().theme);
         setContentView(R.layout.activity_textactivity);
 
         Bundle b = getIntent().getExtras();

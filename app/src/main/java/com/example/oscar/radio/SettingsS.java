@@ -9,6 +9,8 @@ public class SettingsS extends PreferenceActivity {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
+        setTheme(Globals.getInstance().theme); // TODO color
+
         // Display the fragment as the main content
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, Globals.getInstance().settingsFragment).commit();

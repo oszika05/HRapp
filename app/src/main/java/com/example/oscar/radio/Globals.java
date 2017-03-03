@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
@@ -45,7 +46,7 @@ class Globals {
         return instance;
     }
 
-    public MainActivity mainActivity;    // TODO this is bad
+    public MainActivity mainActivity;
     public SettingsFragment settingsFragment;
     public RadioService radioService;
     public radioPlayerService rPlayerService;
@@ -92,6 +93,7 @@ class Globals {
     public boolean restartNeeded = false;
     public AppBarLayout appBarLayout;
     public TabLayout tabLayout;
+    public int theme;
 
 
     public final int NOTIFICATION_ID = 1;

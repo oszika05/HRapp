@@ -2,6 +2,7 @@ package com.example.oscar.radio;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -55,6 +56,7 @@ public class SettingsFragment extends PreferenceFragment {
         // updated to reflect the new value, per the Android Design
         // guidelines.
 
+
         bindPreferenceSummaryToValue(findPreference("quality"));
         bindPreferenceSummaryToValueBoolean(findPreference("alternate"));
     }
@@ -85,6 +87,10 @@ public class SettingsFragment extends PreferenceFragment {
                 SharedPreferences mPrefs = Globals.getInstance().mainActivity.getSharedPreferences("asd", 0);
                 SharedPreferences.Editor mEditor = mPrefs.edit();
                 mEditor.putInt("quality", index).apply();
+
+                mEditor.putInt("colorAccent", Color.parseColor("#EEFF41")).apply();
+                mEditor.putInt("colorPrimary", Color.parseColor("#009688")).apply();
+                mEditor.putInt("colorPrimaryDark", Color.parseColor("#00796B")).apply();
 
                 // Set the summary to reflect the new value.
                 preference.setSummary(

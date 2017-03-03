@@ -37,6 +37,8 @@
                 android:id="@+id/HRdesc"
                 android:layout_below="@+id/spacerContact"
                 android:layout_width="match_parent"
+
+                android:textColor="#DE000000"
                 android:layout_height="wrap_content"
                 android:text="Hit Rádió! Mai keresztény pop, rock, gospel, soul! Minden este igehirdetés! Élő adás, vendégek, napi 24 órában! Hit hallás által! www.hitradio.hu" />
 

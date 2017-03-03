@@ -239,8 +239,10 @@ public class MainActivity extends AppCompatActivity
 */
 
 
-        // Configure the refreshing colors TODO this
-        Globals.getInstance().musicSwipeContainer.setColorSchemeResources(R.color.colorAccent);
+        // Configure the refreshing colors TODO this <- color ?DONE?
+        // Globals.getInstance().musicSwipeContainer.setColorSchemeResources(R.color.colorAccent);
+        Globals.getInstance().musicSwipeContainer.setColorSchemeResources(R.attr.colorAccent);
+
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);  // the volume control is controlling the media playback, not he ringtone
 
@@ -258,6 +260,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setTheme(Globals.getInstance().theme);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -393,6 +396,12 @@ public class MainActivity extends AppCompatActivity
                 e.printStackTrace();
             }
 
+            if(Globals.getInstance().programs.size() == 0) {  // the list is not yet loaded
+                for(int i=0; i<7; ++i)
+                    Globals.getInstance().programSwipeContainer[i].setRefreshing(true);  // the refreshing icon TODO error here
+
+                Globals.getInstance().radioService.downloadHtml();    // getting the programs
+            }
 
 
 
@@ -402,7 +411,7 @@ public class MainActivity extends AppCompatActivity
             if(Globals.getInstance().programs == null)
                 return false;
 
-            for(int i=0; i<Globals.getInstance().programs.size(); i++) {  // todo clickable days
+            for(int i=0; i<Globals.getInstance().programs.size(); i++) {
                 Globals.getInstance().programs.get(i).getName();
             }
 
