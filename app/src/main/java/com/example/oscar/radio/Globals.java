@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.media.AudioManager;
@@ -314,5 +315,17 @@ class Globals {
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
+    }
+
+    public int themeN = 0;
+    public int themes[] = new int[6];
+    public void setTheme() {
+        Log.d("haho", "setTheme: " + themeN);
+        theme = themes[themeN++];
+        if (themeN == 6) themeN = 0;
+
+        SharedPreferences mPrefs = Globals.getInstance().mainActivity.getSharedPreferences("asd", 0);
+        SharedPreferences.Editor mEditor = mPrefs.edit();
+        mEditor.putInt("theme", themeN).apply();
     }
 }

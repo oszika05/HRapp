@@ -39,6 +39,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.media.AudioManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -107,6 +108,40 @@ public class MainActivity extends AppCompatActivity
         mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Globals.getInstance().mNotifyMgr = mNotifyMgr;
         Globals.getInstance().mBuilder = mBuilder;
+
+
+        Button themeBtn = (Button) findViewById(R.id.toggleThemeButton);
+        themeBtn.setOnClickListener(new View.OnClickListener() {
+            private String getThemeName() {
+                switch(Globals.getInstance().themeN) {
+                    case 0: return "Brown";
+                    case 1: return "Indigo";
+                    case 2: return "Teal";
+                    case 3: return "Pink";
+                    case 4: return "Green";
+                    case 5: return "Gray";
+                }
+
+                return "";
+            }
+
+            @Override
+            public void onClick(View v) {
+                Globals.getInstance().setTheme();
+
+
+
+                Spanned result;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    result = Html.fromHtml("<font color=\"#ffffff\">" + getThemeName() + "</font>", Html.FROM_HTML_MODE_LEGACY);
+                } else {
+                    result = Html.fromHtml("<font color=\"#ffffff\">" + getThemeName() + "</font>");
+                }
+                Snackbar.make(v, result, Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+
 
         Globals.getInstance().fab = (FloatingActionButton) findViewById(R.id.fab);
         if(Globals.getInstance().playing)
