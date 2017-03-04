@@ -1,10 +1,12 @@
 package com.example.oscar.radio;
 
+import android.content.res.Resources;
 import android.media.tv.TvContract;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,9 +51,8 @@ public class ProgramFragment extends Fragment {
                 }
             }
         });
-        // Configure the refreshing colors
-        Globals.getInstance().programSwipeContainer[day - 1].setColorSchemeResources(R.color.colorAccent);
 
+        Globals.getInstance().refreshSwypeContainerColor(); // set the swyperefreshcontainer's color
 
 
         if(Globals.getInstance().programs == null)

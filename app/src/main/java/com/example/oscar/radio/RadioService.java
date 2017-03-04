@@ -40,7 +40,7 @@ public class RadioService extends Service {
     public void setNotificationButton() {
         Globals.getInstance().mBuilder.mActions.clear();
         if(Globals.getInstance().playing) {
-            Globals.getInstance().mBuilder.addAction(R.drawable.ic_pause, "Pause", Globals.getInstance().getInstance().getInstance().pIntent);
+            Globals.getInstance().mBuilder.addAction(R.drawable.ic_pause, "Pause", Globals.getInstance().pIntent);
             Globals.getInstance().mBuilder.setOngoing(true);
             Globals.getInstance().mBuilder.setSmallIcon(R.drawable.ic_play);
 

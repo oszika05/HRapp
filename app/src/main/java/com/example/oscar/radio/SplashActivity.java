@@ -18,7 +18,7 @@ public class SplashActivity extends Activity {
         Globals.getInstance().colorAccent = mPrefs.getInt("colorAccent", R.color.colorAccent);
         */
 
-        Globals.getInstance().theme = mPrefs.getInt("theme", R.style.AppTheme_Teal);    // for now
+        Globals.getInstance().theme = mPrefs.getInt("theme", R.style.AppTheme_Grey);    // for now
 
         /*
         // get the color

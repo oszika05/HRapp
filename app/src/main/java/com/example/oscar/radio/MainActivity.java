@@ -7,9 +7,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -21,6 +26,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -239,9 +245,8 @@ public class MainActivity extends AppCompatActivity
 */
 
 
-        // Configure the refreshing colors TODO this <- color ?DONE?
-        // Globals.getInstance().musicSwipeContainer.setColorSchemeResources(R.color.colorAccent);
-        Globals.getInstance().musicSwipeContainer.setColorSchemeResources(R.attr.colorAccent);
+        // Configure the refreshing colors
+        Globals.getInstance().refreshSwypeContainerColor();
 
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);  // the volume control is controlling the media playback, not he ringtone
@@ -339,6 +344,9 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        Globals.getInstance().refreshSwypeContainerColor(); // set the refresh colors
+
+
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 

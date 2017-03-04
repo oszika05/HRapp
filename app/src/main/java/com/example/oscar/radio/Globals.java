@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -20,6 +21,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -220,6 +222,23 @@ class Globals {
         return activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
 
+    }
+
+    public void refreshSwypeContainerColor() {
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = Globals.getInstance().mainActivity.getApplicationContext().getTheme();
+        theme.resolveAttribute(R.attr.colorAccent, typedValue, true);
+
+        TypedValue a = new TypedValue();
+        Globals.getInstance().mainActivity.getTheme().resolveAttribute(R.attr.colorAccent, a, true);
+        int color = a.data;
+
+        if(Globals.getInstance().musicSwipeContainer != null)
+            Globals.getInstance().musicSwipeContainer.setColorSchemeColors(color);
+        for(int i=0; i<7; ++i) {
+            if(Globals.getInstance().programSwipeContainer[i] != null)
+                Globals.getInstance().programSwipeContainer[i].setColorSchemeColors(color);
+        }
     }
 
     public void buildNotification(Context ctx) {
