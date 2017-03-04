@@ -25,6 +25,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.CardView;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -114,10 +116,22 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 if(Globals.getInstance().loadBar==null) { // init the snackbar
-                    Globals.getInstance().loadBar = Snackbar.make(view, "Pufferelés...", Snackbar.LENGTH_INDEFINITE);
+                    Spanned result;
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                        result = Html.fromHtml("<font color=\"#ffffff\">Pufferelés...</font>", Html.FROM_HTML_MODE_LEGACY);
+                    } else {
+                        result = Html.fromHtml("<font color=\"#ffffff\">Pufferelés...</font>");
+                    }
+                    Globals.getInstance().loadBar = Snackbar.make(view, result, Snackbar.LENGTH_INDEFINITE);
                 }
 
-                Globals.getInstance().errBar = Snackbar.make(view, "Hiba! Ellenőrizze az internetkapcsolatát!", Snackbar.LENGTH_LONG);
+                Spanned result;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    result = Html.fromHtml("<font color=\"#ffffff\">Hiba! Ellenőrizze az internetkapcsolatát!</font>", Html.FROM_HTML_MODE_LEGACY);
+                } else {
+                    result = Html.fromHtml("<font color=\"#ffffff\">Hiba! Ellenőrizze az internetkapcsolatát!</font>");
+                }
+                Globals.getInstance().errBar = Snackbar.make(view, result, Snackbar.LENGTH_LONG);
 
                 FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 

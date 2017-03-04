@@ -233,6 +233,9 @@ class Globals {
         Globals.getInstance().mainActivity.getTheme().resolveAttribute(R.attr.colorAccent, a, true);
         int color = a.data;
 
+
+        if (Globals.getInstance().mainSwipeContainer != null)
+            Globals.getInstance().mainSwipeContainer.setColorSchemeColors(color);
         if(Globals.getInstance().musicSwipeContainer != null)
             Globals.getInstance().musicSwipeContainer.setColorSchemeColors(color);
         for(int i=0; i<7; ++i) {
