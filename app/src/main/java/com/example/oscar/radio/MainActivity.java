@@ -82,8 +82,6 @@ public class MainActivity extends AppCompatActivity
             Globals.getInstance().mainSwipeContainer.setRefreshing(true); // the first init
         Globals.getInstance().mainSwipeContainer.setEnabled(true);
 
-        Globals.getInstance().mainSwipeContainer.setColorSchemeResources(R.color.colorAccent);
-
         Globals.getInstance().titleText = (TextView) findViewById(R.id.title);
         Globals.getInstance().artistText = (TextView) findViewById(R.id.artist);
         Globals.getInstance().programText = (TextView) findViewById(R.id.programTitle);

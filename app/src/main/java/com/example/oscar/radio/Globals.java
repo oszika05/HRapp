@@ -320,12 +320,13 @@ class Globals {
     public int themeN = 0;
     public int themes[] = new int[6];
     public void setTheme() {
-        Log.d("haho", "setTheme: " + themeN);
         theme = themes[themeN++];
         if (themeN == 6) themeN = 0;
 
         SharedPreferences mPrefs = Globals.getInstance().mainActivity.getSharedPreferences("asd", 0);
         SharedPreferences.Editor mEditor = mPrefs.edit();
         mEditor.putInt("theme", themeN).apply();
+
+        mainActivity.recreate();
     }
 }
