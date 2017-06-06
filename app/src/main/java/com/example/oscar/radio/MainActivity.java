@@ -53,7 +53,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity
@@ -208,6 +208,10 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+
+        Globals.getInstance().news = new ArrayList<News>();
+        Globals.getInstance().newsAdapter = new RecyclerAdapter((ArrayList<News>) Globals.getInstance().news);
+
         CardView face = (CardView) findViewById(R.id.card_view_facebook);
         face.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -301,15 +305,6 @@ public class MainActivity extends AppCompatActivity
         // Configure the refreshing colors
         Globals.getInstance().refreshSwypeContainerColor();
 
-
-
-        Globals.getInstance().news_test_1_1 = (TextView) findViewById(R.id.news_test1_text1);
-        Globals.getInstance().news_test_1_2 = (TextView) findViewById(R.id.news_test1_text2);
-        Globals.getInstance().news_test_1_image = (ImageView) findViewById(R.id.thumbnail_news_test1);
-
-        Globals.getInstance().news_test_2_1 = (TextView) findViewById(R.id.news_test2_text1);
-        Globals.getInstance().news_test_2_2 = (TextView) findViewById(R.id.news_test2_text2);
-        Globals.getInstance().news_test_2_image = (ImageView) findViewById(R.id.thumbnail_news_test2);
 
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);  // the volume control is controlling the media playback, not he ringtone

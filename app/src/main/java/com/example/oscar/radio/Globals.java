@@ -97,6 +97,7 @@ class Globals {
     public boolean restartNeeded = false;
     public AppBarLayout appBarLayout;
     public TabLayout tabLayout;
+    public RecyclerAdapter newsAdapter;
     public int theme;
 
     // TEMP

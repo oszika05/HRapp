@@ -2,6 +2,8 @@ package com.example.oscar.radio;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +12,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 public class Textactivity extends AppCompatActivity {
 
@@ -24,21 +28,30 @@ public class Textactivity extends AppCompatActivity {
         String type = "";
         String desc = "";
         String time = "";
+        Bitmap image = null;
         int cover = R.drawable.cover_no22;
+
+        ImageView coverPhoto = (ImageView) findViewById(R.id.textactivity_cover_photo);
+
         if(b != null) {
             try {
                 title = b.getString("title");
                 type = b.getString("type");
                 desc = b.getString("desc");
                 time = b.getString("time");
-                cover = b.getInt("cover");
+
+                if(getIntent().hasExtra("picture")) {
+                    Picasso.with(coverPhoto.getContext()).load(b.getString("picture")).into(coverPhoto);
+                } else {
+                    cover = b.getInt("cover");
+                }
+
             } catch (Resources.NotFoundException e) {
                 cover = R.drawable.cover_no22;
                 e.printStackTrace();
             }
         }
 
-        Log.d("COVER", "onCreate: COVER: " + cover);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -47,12 +60,13 @@ public class Textactivity extends AppCompatActivity {
         TextView typeText = (TextView) findViewById(R.id.type_text);
         TextView descText = (TextView) findViewById(R.id.description_textview);
         TextView timeText = (TextView) findViewById(R.id.number_textview);
-        ImageView coverPhoto = (ImageView) findViewById(R.id.textactivity_cover_photo);
 
         typeText.setText(type);
         descText.setText(desc);
         timeText.setText(time);
-        coverPhoto.setImageResource(cover);
+        if (!getIntent().hasExtra("picture")) {
+            coverPhoto.setImageResource(cover);
+        }
 
         android.view.Display display = ((android.view.WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         Point p = new Point();

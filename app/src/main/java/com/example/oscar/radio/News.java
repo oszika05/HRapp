@@ -27,11 +27,11 @@ public class News {
         this.date = date;
     }
 
-    public Bitmap getPicture() {
+    public String getPicture() {
         return picture;
     }
 
-    public void setPicture(Bitmap picture) {
+    public void setPicture(String picture) {
         this.picture = picture;
     }
 
@@ -52,7 +52,7 @@ public class News {
     }
 
     String date;
-    Bitmap picture;
+    String picture;
     String content;
     String link;
 
@@ -60,10 +60,11 @@ public class News {
         return "";
     }
 
-    public News(String title, String date, String content, String link) {
+    public News(String title, String date, String content, String picture, String link) {
         this.title = title;
         this.date = date;
         this.content = content;
+        this.picture = picture;
         this.link = link;
     }
 

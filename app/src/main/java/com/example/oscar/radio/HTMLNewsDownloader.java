@@ -34,25 +34,13 @@ public class HTMLNewsDownloader extends AsyncTask<Void, Void, List<News>>{
             Log.d("HTML", "doInBackground: " + rawNews.size());
 
             for (Element n : rawNews) {
-
-                String urldisplay = n.select("div.kepkocka > a > img").attr("src");
-                Bitmap mIcon11 = null;
-                try {
-                    InputStream in = new java.net.URL(urldisplay).openStream();
-                    mIcon11 = BitmapFactory.decodeStream(in);
-                } catch (Exception e) {
-                    Log.e("Error", e.getMessage());
-                    e.printStackTrace();
-                }
-
-
                 news.add(new News(
                         n.select("h3 > a").html(), // title
                         n.select("a.datum > span").html(), // date
                         n.select("a.szoveg_body").html(), // content
+                        n.select("div.kepkocka > a > img").attr("src"), // picture
                         n.select("a.szoveg_body").attr("href")  // link
                 ));
-                news.get(news.size() - 1).setPicture(mIcon11);
 /*
                 Log.d("NEWS", "title: " + news.get(news.size() - 1).getTitle());
                 Log.d("NEWS", "date: " + news.get(news.size() - 1).getDate());
@@ -70,21 +58,13 @@ public class HTMLNewsDownloader extends AsyncTask<Void, Void, List<News>>{
     }
 
     @Override
-    protected void onPostExecute(final List<News> news){
+    protected void onPostExecute(final List<News> news) {
         Globals.getInstance().mainActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 try {
                     Globals.getInstance().news = news;
-
-                    Globals.getInstance().news_test_1_1.setText(news.get(0).getTitle());
-                    Globals.getInstance().news_test_1_2.setText(news.get(0).getDate());
-                    Globals.getInstance().news_test_1_image.setImageBitmap(news.get(0).getPicture());
-
-                    Globals.getInstance().news_test_2_1.setText(news.get(1).getTitle());
-                    Globals.getInstance().news_test_2_2.setText(news.get(1).getDate());
-                    Globals.getInstance().news_test_2_image.setImageBitmap(news.get(1).getPicture());
-
+                    Globals.getInstance().newsAdapter.refresh((ArrayList<News>) news);
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
