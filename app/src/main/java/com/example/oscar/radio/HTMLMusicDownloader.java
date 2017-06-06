@@ -38,10 +38,15 @@ public class HTMLMusicDownloader extends AsyncTask<Void, Void, List<MusicTitle>>
 
         try {
             // Connect to the web site
-            Document document = Jsoup.connect("http://streamstat.hu/tracklist.cgi?5398&ch=2&r").get();
+            // Document document = Jsoup.connect("http://streamstat.hu/tracklist.cgi?5398&ch=2&r").get();
+            Document document = Jsoup.connect("https://onlinestream.hu/tracklist.cgi?id=5398&ch=3&songsearch=%20&tfp=100&tp=1").get();
+
+
 
             // Using Elements to get the class data
-            Elements line = document.select("div.mline_line");
+            Elements lines = document.select("table.table");
+            Elements line = lines.select("tbody");
+            Log.d("HTML", "doInBackground: " + line.html());
 
             for (int i = 0; i < line.size(); i++) {   // Monday
                 if (Globals.getInstance().validSongTitle(line.get(i).select("div.mline_song").text())) {

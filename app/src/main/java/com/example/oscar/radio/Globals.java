@@ -58,12 +58,12 @@ class Globals {
     public boolean playing;
     public String url;
     public String[] urls = {
-            "http://live7.hit.hu:8080/speech",  // low
-            "http://live7.hit.hu:8080/low",     // mid
-            "http://live7.hit.hu:8080/high",    // high
-            "http://194.38.107.136:8080/speech", // alternate low
-            "http://194.38.107.136:8080/low",   // alternate mid
-            "http://194.38.107.136:8080/high"  // alternate high
+            "http://stream3.hit.hu:8080/speech",  // low
+            "http://stream3.hit.hu:8080/low",     // mid
+            "http://stream3.hit.hu:8080/high",    // high
+            "http://79.172.239.251:8080/speech", // alternate low
+            "http://79.172.239.251:8080/low",   // alternate mid
+            "http://79.172.239.251:8080/high"  // alternate high
     };
     public int activeUrl;
     public boolean alternateUrl;
@@ -83,6 +83,7 @@ class Globals {
     public CardView noInternetCard;
     public List<Program> programs = new ArrayList<Program>();
     public List<MusicTitle> songs = new ArrayList<MusicTitle>();
+    public List<News> news = new ArrayList<News>();
     public MusicAdapter musicAdapter;
     public ProgramAdapter programAdapter[] = new ProgramAdapter[7];
     public SwipeRefreshLayout musicSwipeContainer;
@@ -97,6 +98,16 @@ class Globals {
     public AppBarLayout appBarLayout;
     public TabLayout tabLayout;
     public int theme;
+
+    // TEMP
+
+    public TextView news_test_1_1;
+    public TextView news_test_1_2;
+    public ImageView news_test_1_image;
+
+    public TextView news_test_2_1;
+    public TextView news_test_2_2;
+    public ImageView news_test_2_image;
 
 
     public final int NOTIFICATION_ID = 1;

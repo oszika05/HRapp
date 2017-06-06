@@ -1,6 +1,7 @@
 package com.example.oscar.radio;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 
 import java.io.IOException;
@@ -17,6 +18,10 @@ class DownloadTitle extends AsyncTask<String, Void, String> {   // This is a lon
             String metaData = meta.getMeta();
             if(metaData == null)
                 return "";
+            else
+                Log.d("META", "doInBackground: NOT NULL meta");
+
+            Log.d("META", "doInBackground: " + meta.getTitle()); // TODO: empty string from meta - problem on the other side?
 
             metaData = metaData.replace("_", " ");
 

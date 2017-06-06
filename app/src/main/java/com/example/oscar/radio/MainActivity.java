@@ -3,6 +3,7 @@ package com.example.oscar.radio;
 import android.app.ActionBar;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
@@ -45,7 +46,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.picasso.Picasso;
 
@@ -130,7 +133,7 @@ public class MainActivity extends AppCompatActivity
 
 
                 Spanned result;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     result = Html.fromHtml("<font color=\"#ffffff\">" + getThemeName() + "</font>", Html.FROM_HTML_MODE_LEGACY);
                 } else {
                     result = Html.fromHtml("<font color=\"#ffffff\">" + getThemeName() + "</font>");
@@ -150,7 +153,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 if(Globals.getInstance().loadBar==null) { // init the snackbar
                     Spanned result;
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         result = Html.fromHtml("<font color=\"#ffffff\">Pufferelés...</font>", Html.FROM_HTML_MODE_LEGACY);
                     } else {
                         result = Html.fromHtml("<font color=\"#ffffff\">Pufferelés...</font>");
@@ -159,7 +162,7 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 Spanned result;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     result = Html.fromHtml("<font color=\"#ffffff\">Hiba! Ellenőrizze az internetkapcsolatát!</font>", Html.FROM_HTML_MODE_LEGACY);
                 } else {
                     result = Html.fromHtml("<font color=\"#ffffff\">Hiba! Ellenőrizze az internetkapcsolatát!</font>");
@@ -168,6 +171,10 @@ public class MainActivity extends AppCompatActivity
 
                 FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
+                if (Globals.getInstance().loadBar != null)
+                    Globals.getInstance().loadBar.dismiss();
+
+                new HTMLNewsDownloader().execute();
 
                 if (!Globals.getInstance().playing) {
                     if (!Globals.getInstance().isNetworkOnline()) {
@@ -192,7 +199,6 @@ public class MainActivity extends AppCompatActivity
 
                     fab.setImageResource(R.drawable.ic_pause_light);    // changing the icon of the fab button
                 } else {
-                    Globals.getInstance().loadBar.dismiss();
                     Globals.getInstance().stopRadio();
                     //stopNotification();   // removing the notification
                     fab.setImageResource(R.drawable.ic_play_light);     // changing the icon of the fab button
@@ -233,7 +239,7 @@ public class MainActivity extends AppCompatActivity
                 i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"info@hitradio.hu"});
                 try {
                     startActivity(Intent.createChooser(i, "Email küldése..."));
-                } catch (android.content.ActivityNotFoundException ex) {
+                } catch (ActivityNotFoundException ex) {
                     Toast.makeText(MainActivity.this, "Nincs email kliens telepítve!", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -247,7 +253,7 @@ public class MainActivity extends AppCompatActivity
                 callIntent.setData(Uri.parse("tel:+3614317010"));
                 try {
                     startActivity(callIntent);
-                } catch (android.content.ActivityNotFoundException ex) {
+                } catch (ActivityNotFoundException ex) {
                     Toast.makeText(MainActivity.this, "Hiba történt!", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -294,6 +300,16 @@ public class MainActivity extends AppCompatActivity
 
         // Configure the refreshing colors
         Globals.getInstance().refreshSwypeContainerColor();
+
+
+
+        Globals.getInstance().news_test_1_1 = (TextView) findViewById(R.id.news_test1_text1);
+        Globals.getInstance().news_test_1_2 = (TextView) findViewById(R.id.news_test1_text2);
+        Globals.getInstance().news_test_1_image = (ImageView) findViewById(R.id.thumbnail_news_test1);
+
+        Globals.getInstance().news_test_2_1 = (TextView) findViewById(R.id.news_test2_text1);
+        Globals.getInstance().news_test_2_2 = (TextView) findViewById(R.id.news_test2_text2);
+        Globals.getInstance().news_test_2_image = (ImageView) findViewById(R.id.thumbnail_news_test2);
 
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);  // the volume control is controlling the media playback, not he ringtone
@@ -583,4 +599,39 @@ public class MainActivity extends AppCompatActivity
         findViewById(id).setVisibility(View.VISIBLE);
     }
 
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Main Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
+    }
 }
