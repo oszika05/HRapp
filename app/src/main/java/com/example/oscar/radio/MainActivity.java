@@ -26,6 +26,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
@@ -63,6 +65,8 @@ public class MainActivity extends AppCompatActivity
     public static PendingIntent pToggleIntent;
     public static NotificationManager mNotifyMgr;
     private static ListView songsListView;  // TODO fix this
+    private LinearLayoutManager mLinearLayoutManager;
+    private RecyclerView mRecyclerView;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -93,11 +97,6 @@ public class MainActivity extends AppCompatActivity
         Globals.getInstance().programCardImage = (ImageView) findViewById(R.id.thumbnail_program);
         Globals.getInstance().musicCard = (CardView) findViewById(R.id.card_view_music);
         Globals.getInstance().programCard = (CardView) findViewById(R.id.card_view_program);
-        Globals.getInstance().noInternetCard = (CardView) findViewById(R.id.card_view_nointernet);
-
-        Globals.getInstance().noInternetCard.setVisibility(Globals.getInstance().isNetworkOnline() ? View.GONE : View.VISIBLE);
-
-        Picasso.with(getApplicationContext()).load(R.drawable.internet2).into((ImageView)findViewById(R.id.thumbnail_nointernet));
 
         Globals.getInstance().finishedLoading = true;
 
@@ -208,9 +207,14 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
         Globals.getInstance().news = new ArrayList<News>();
         Globals.getInstance().newsAdapter = new RecyclerAdapter((ArrayList<News>) Globals.getInstance().news);
+        mRecyclerView.setAdapter(Globals.getInstance().newsAdapter);
+        setRecyclerViewScrollListener();
+        Log.d("INIT", "init: recView");
 
         CardView face = (CardView) findViewById(R.id.card_view_facebook);
         face.setOnClickListener(new View.OnClickListener() {
@@ -409,7 +413,6 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_radio) {
-            Picasso.with(getApplicationContext()).load(R.drawable.internet2).into((ImageView)findViewById(R.id.thumbnail_nointernet));
 
             changeViewVisibility(R.id.t1);
         } else if (id == R.id.nav_program) {
@@ -629,4 +632,22 @@ public class MainActivity extends AppCompatActivity
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
         client.disconnect();
     }
+
+    private int getLastVisibleItemPosition() {
+        return mLinearLayoutManager.findLastVisibleItemPosition();
+    }
+
+    private void setRecyclerViewScrollListener() {
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                int totalItemCount = mRecyclerView.getLayoutManager().getItemCount();
+                if (totalItemCount == getLastVisibleItemPosition() + 1) {
+                    // requestPhoto(); // TODO
+                }
+            }
+        });
+    }
+
 }

@@ -80,7 +80,6 @@ class Globals {
     public Snackbar errBar;
     public CardView musicCard;
     public CardView programCard;
-    public CardView noInternetCard;
     public List<Program> programs = new ArrayList<Program>();
     public List<MusicTitle> songs = new ArrayList<MusicTitle>();
     public List<News> news = new ArrayList<News>();

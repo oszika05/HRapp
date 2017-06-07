@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -62,18 +63,21 @@ public class Textactivity extends AppCompatActivity {
         TextView timeText = (TextView) findViewById(R.id.number_textview);
 
         typeText.setText(type);
-        descText.setText(desc);
+        descText.setText(Html.fromHtml(desc));
         timeText.setText(time);
         if (!getIntent().hasExtra("picture")) {
             coverPhoto.setImageResource(cover);
         }
 
+        if (getIntent().hasExtra("contentLoading")) {
+            int n = b.getInt("newsN");
+            Globals.getInstance().news.get(n).getFullArticle(descText);
+        }
+
         android.view.Display display = ((android.view.WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         Point p = new Point();
         display.getSize(p);
-        if (descText.getHeight() < 0.7*p.y) {
-            descText.setHeight((int)(0.7*p.y));
-        }
+        descText.setMinHeight((int)(0.7*p.y));
 
         setSupportActionBar(toolbar);
 

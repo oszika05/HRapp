@@ -73,7 +73,6 @@ public class HTMLDownloader extends AsyncTask<Void, Void, List<Program>> {
     protected void onPostExecute(final List<Program> programs){
 
         HTMLDownloader.setProgramCard(programs);
-        Globals.getInstance().noInternetCard.setVisibility(View.GONE); // hide noInternet card
         Globals.getInstance().programCard.setVisibility(View.VISIBLE);    // show programcard
 
         Globals.getInstance().mainActivity.runOnUiThread(new Runnable() {
@@ -100,7 +99,6 @@ public class HTMLDownloader extends AsyncTask<Void, Void, List<Program>> {
                 if(Globals.getInstance().programSwipeContainer[i] != null)
                     Globals.getInstance().programSwipeContainer[i].setRefreshing(false);
             }
-            Globals.getInstance().noInternetCard.setVisibility(View.GONE);
             Globals.getInstance().mainSwipeContainer.setRefreshing(false);    // the loading is finished
             Globals.getInstance().mainSwipeContainer.setEnabled(false);
         } catch (NullPointerException e) {

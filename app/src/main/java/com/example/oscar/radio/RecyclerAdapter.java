@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,11 +55,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.NewsHo
         public void onClick(View v) {
             Context context = itemView.getContext();
             Intent newsIntent = new Intent(context, Textactivity.class);
-            newsIntent.putExtra("title", news.getTitle());
-            newsIntent.putExtra("type", "type");
-            newsIntent.putExtra("desc", news.getContent());
+            newsIntent.putExtra("title", news.getType());
+            newsIntent.putExtra("type", news.getTitle());
+            newsIntent.putExtra("desc", "<br /><b>" + news.getContent() + "</b>");
             newsIntent.putExtra("time", news.getDate());
             newsIntent.putExtra("picture", news.getPicture());
+            newsIntent.putExtra("contentLoading", true);
+            int n = Globals.getInstance().news.indexOf(news);
+            newsIntent.putExtra("newsN", n);
 
             context.startActivity(newsIntent);
             Log.d("RecyclerView", "CLICK!");

@@ -86,7 +86,6 @@ class DownloadTitle extends AsyncTask<String, Void, String> {   // This is a lon
 
             try {
                 Globals.getInstance().musicCard.setVisibility(View.VISIBLE);  // display the music card
-                Globals.getInstance().noInternetCard.setVisibility(View.GONE);    // hide the noInternet card
                 Globals.getInstance().mainSwipeContainer.setRefreshing(false);    // the loading is finished
                 Globals.getInstance().mainSwipeContainer.setEnabled(false);
             } catch (NullPointerException e) {
