@@ -2,6 +2,7 @@ package com.example.oscar.radio;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ public class ProgramAdapter extends BaseAdapter {
     private int day;
     private ListView list;
     private static boolean first = true;
+    private static HTMLDownloader downloader = null;
 
     private LayoutInflater mInflater;
 
@@ -106,6 +108,13 @@ public class ProgramAdapter extends BaseAdapter {
 
         if(first) {
             goToCurrItem();
+        }
+    }
+
+    public void getPrograms() {
+        if (downloader == null || downloader.getStatus() == AsyncTask.Status.FINISHED) {
+            downloader = new HTMLDownloader();
+            downloader.execute();
         }
     }
 

@@ -70,8 +70,14 @@ public class Textactivity extends AppCompatActivity {
         }
 
         if (getIntent().hasExtra("contentLoading")) {
+            int t = b.getInt("newsType");
             int n = b.getInt("newsN");
-            Globals.getInstance().news.get(n).getFullArticle(descText);
+            Log.d("TTTT", "onCreate: t\t\t" + t);
+            Log.d("NNNN", "onCreate: n\t\t" + n);
+            if(t == -1)
+                Globals.getInstance().news.get(n).getFullArticle(descText);
+            else
+                Globals.getInstance().newsRaw.get(t).get(n).getFullArticle(descText);
         }
 
         android.view.Display display = ((android.view.WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();

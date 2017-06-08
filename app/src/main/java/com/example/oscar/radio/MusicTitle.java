@@ -51,10 +51,16 @@ public class MusicTitle {
     public void setDate(String raw) {
         try {
 
+            Log.d("RAW", "setDate: " + raw);
+
             date = raw.substring(0, 10);
             time = raw.substring(11, 16);
 
         } catch (NumberFormatException e) {
+            e.printStackTrace();
+            time = "";
+            date = "";
+        } catch (StringIndexOutOfBoundsException e) {
             e.printStackTrace();
             time = "";
             date = "";

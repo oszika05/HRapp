@@ -3,6 +3,7 @@ package com.example.oscar.radio;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,8 @@ import static android.support.v4.content.ContextCompat.startActivity;
 
 public class MusicAdapter extends BaseAdapter {
     private static ArrayList<MusicTitle> searchArrayList;
+    private HTMLMusicDownloader downloader = null;
+    private int currentPage = 1; // starts with page 1
 
     private LayoutInflater mInflater;
 
@@ -93,5 +96,17 @@ public class MusicAdapter extends BaseAdapter {
         searchArrayList = (ArrayList<MusicTitle>) Globals.getInstance().songs;
 
         notifyDataSetChanged();
+    }
+
+    public void getSongs() {
+        currentPage = 1;
+        getNextSongs();
+    }
+
+    public void getNextSongs() {
+        if (downloader == null || downloader.getStatus() == AsyncTask.Status.FINISHED) {
+            downloader = new HTMLMusicDownloader();
+            downloader.execute(currentPage++);
+        }
     }
 }

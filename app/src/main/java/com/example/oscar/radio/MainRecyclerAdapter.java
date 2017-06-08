@@ -23,7 +23,7 @@ import java.util.ArrayList;
  * Created by oszi on 6/6/17.
  */
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.NewsHolder> {
+public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapter.MainNewsHolder> {
     private ArrayList<News> news;
     static private HTMLNewsDownloader downloader = null;
     static private int currentPage = 0; // starts from 0
@@ -35,11 +35,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.NewsHo
         isLastPage = value;
     }
 
-    public RecyclerAdapter() {
-        super();
-    }
 
-    public static class NewsHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class MainNewsHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView title;
         private TextView date;
         private TextView desc;
@@ -47,7 +44,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.NewsHo
         private News news;
 
 
-        public NewsHolder(View v) {
+        public MainNewsHolder(View v) {
             super(v);
 
             title = (TextView) v.findViewById(R.id.news_title);
@@ -67,7 +64,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.NewsHo
 
         @Override
         public void onClick(View v) {
-            int t = news.getType().equals(Globals.getInstance().newsRaw.get(0).get(0).getType()) ?  0 : 1;
             Context context = itemView.getContext();
             Intent newsIntent = new Intent(context, Textactivity.class);
             newsIntent.putExtra("title", news.getType());
@@ -76,16 +72,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.NewsHo
             newsIntent.putExtra("time", news.getDate());
             newsIntent.putExtra("picture", news.getPicture());
             newsIntent.putExtra("contentLoading", true);
-            int n = Globals.getInstance().newsRaw.get(t).indexOf(news);
+            int n = Globals.getInstance().news.indexOf(news);
             newsIntent.putExtra("newsN", n);
-            newsIntent.putExtra("newsType", t); // LOL
+            newsIntent.putExtra("newsType", -1);
 
             context.startActivity(newsIntent);
             Log.d("RecyclerView", "CLICK!");
         }
     }
 
-    public RecyclerAdapter(ArrayList<News> news) {
+    public MainRecyclerAdapter(ArrayList<News> news) {
         getNews();
         this.news = news;
     }
@@ -114,14 +110,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.NewsHo
     }
 
     @Override
-    public RecyclerAdapter.NewsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MainRecyclerAdapter.MainNewsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View inflatedView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.news_list_layout, parent, false);
-        return new NewsHolder(inflatedView);
+        return new MainRecyclerAdapter.MainNewsHolder(inflatedView);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerAdapter.NewsHolder holder, int position) {
+    public void onBindViewHolder(MainRecyclerAdapter.MainNewsHolder holder, int position) {
         News newsItem = news.get(position);
         holder.bindNews(newsItem);
     }

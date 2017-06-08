@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity
     private static ListView songsListView;  // TODO fix this
     private LinearLayoutManager mLinearLayoutManager;
     private RecyclerView mRecyclerView;
+    private LinearLayoutManager newsLinearLayoutManager;
+    private RecyclerView newsRecyclerView;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -173,7 +175,8 @@ public class MainActivity extends AppCompatActivity
                 if (Globals.getInstance().loadBar != null)
                     Globals.getInstance().loadBar.dismiss();
 
-                new HTMLNewsDownloader().execute();
+                // new HTMLNewsDownloader().execute();
+                Globals.getInstance().newsAdapter[0].getNews();
 
                 if (!Globals.getInstance().playing) {
                     if (!Globals.getInstance().isNetworkOnline()) {
@@ -182,7 +185,8 @@ public class MainActivity extends AppCompatActivity
                     }
 
                     if (Globals.getInstance().programs.size()==0)
-                        Globals.getInstance().radioService.downloadHtml();    // this refreshes the programs
+                        Globals.getInstance().programAdapter[0].getPrograms();
+                        // Globals.getInstance().radioService.downloadHtml();    // this refreshes the programs
 
 
                     if(!Globals.getInstance().finishedLoading)
@@ -207,14 +211,13 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        // mainNews list
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         Globals.getInstance().news = new ArrayList<News>();
-        Globals.getInstance().newsAdapter = new RecyclerAdapter((ArrayList<News>) Globals.getInstance().news);
-        mRecyclerView.setAdapter(Globals.getInstance().newsAdapter);
-        setRecyclerViewScrollListener();
-        Log.d("INIT", "init: recView");
+        Globals.getInstance().mainNewsAdapter = new RecyclerAdapter((ArrayList<News>) Globals.getInstance().news);
+        mRecyclerView.setAdapter(Globals.getInstance().mainNewsAdapter);
 
         CardView face = (CardView) findViewById(R.id.card_view_facebook);
         face.setOnClickListener(new View.OnClickListener() {
@@ -278,7 +281,8 @@ public class MainActivity extends AppCompatActivity
 
                 try {
                     if(Globals.getInstance().isNetworkOnline())
-                        Globals.getInstance().radioService.refreshSongsHTML();
+                        //Globals.getInstance().radioService.refreshSongsHTML();
+                        Globals.getInstance().musicAdapter.getSongs();
                     //Globals.getInstance().musicAdapter.refresh();
                     //((MusicAdapter) songsListView.getAdapter()).refresh();
                 } catch (NullPointerException e) {  // TODO error
@@ -362,7 +366,9 @@ public class MainActivity extends AppCompatActivity
         if(!Globals.getInstance().playing) {
             Globals.getInstance().radioService.refreshMetaData(); // this refreshes the metadata in every 2 sec
             if(Globals.getInstance().isNetworkOnline())
-                Globals.getInstance().radioService.downloadHtml();    // this refreshes the programs
+                new HTMLDownloader().execute();
+                // Globals.getInstance().programAdapter[0].getPrograms();
+                // Globals.getInstance().radioService.downloadHtml();    // this refreshes the programs
         }
     }
 
@@ -469,7 +475,8 @@ public class MainActivity extends AppCompatActivity
                 for(int i=0; i<7; ++i)
                     Globals.getInstance().programSwipeContainer[i].setRefreshing(true);  // the refreshing icon TODO error here
 
-                Globals.getInstance().radioService.downloadHtml();    // getting the programs
+                //Globals.getInstance().radioService.downloadHtml();    // getting the programs
+                Globals.getInstance().programAdapter[0].getPrograms();
             }
 
 
@@ -517,10 +524,62 @@ public class MainActivity extends AppCompatActivity
             if(Globals.getInstance().songs.size() == 0) {  // the list is not yet loaded TODO no internet
                 Globals.getInstance().musicSwipeContainer.setRefreshing(true);  // the refreshing icon
 
-                Globals.getInstance().radioService.refreshSongsHTML();
+                //Globals.getInstance().radioService.refreshSongsHTML();
+                Globals.getInstance().musicAdapter.getSongs();
             }
 
             changeViewVisibility(R.id.t4);
+        } else if (id == R.id.nav_news) {
+
+            if(!Globals.getInstance().isNetworkOnline()) {
+                Globals.getInstance().errBar = Snackbar.make(findViewById(R.id.drawer_layout), "Hiba! Ellenőrizze az internetkapcsolatát!", Snackbar.LENGTH_LONG);
+                Globals.getInstance().errBar.show();
+                ((DrawerLayout) findViewById(R.id.drawer_layout)).closeDrawers();
+                return false;
+            }
+
+            TabLayout tabLayout = (TabLayout) findViewById(R.id.news_tab_layout);
+            tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+            // Removing tabs
+            tabLayout.removeAllTabs();
+
+            // Adding Tabs
+            tabLayout.addTab(tabLayout.newTab().setText("Hitéleti hírek"));
+            tabLayout.addTab(tabLayout.newTab().setText("Rádiós hírek"));
+
+
+            final ViewPager viewPager = (ViewPager) findViewById(R.id.newsPager);
+            final NewsPagerAdapter adapter = new NewsPagerAdapter
+                    (getSupportFragmentManager());
+            viewPager.setAdapter(adapter);
+            viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+            tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    viewPager.setCurrentItem(tab.getPosition());
+                }
+
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+
+                }
+            });
+
+            if(Globals.getInstance().news.size() == 0) {  // the list is not yet loaded
+                for(int i = 0; i < 2; ++i)
+                    Globals.getInstance().newsSwipeContainer[i].setRefreshing(true);  // the refreshing icon TODO error here
+
+                //Globals.getInstance().radioService.downloadHtml();    // getting the programs
+                Globals.getInstance().newsAdapter[0].getNews();
+            }
+
+            changeViewVisibility(R.id.t5);
         } else if (id == R.id.nav_settings) {
             Intent intentSetPref = new Intent(getApplicationContext(), SettingsS.class);
             startActivityForResult(intentSetPref, 0);
@@ -585,9 +644,10 @@ public class MainActivity extends AppCompatActivity
         findViewById(R.id.t2).setVisibility(View.GONE);
         findViewById(R.id.t3).setVisibility(View.GONE);
         findViewById(R.id.t4).setVisibility(View.GONE);
+        findViewById(R.id.t5).setVisibility(View.GONE);
 
         if(Build.VERSION.SDK_INT >= 21 && Globals.getInstance().appBarLayout != null) {
-            if (id == R.id.t2) {
+            if (id == R.id.t2 || id == R.id.t5) {
                 Globals.getInstance().appBarLayout.setElevation(0.0f);
             } else {
                 Globals.getInstance().appBarLayout.setElevation(10.5f); // the original value
@@ -631,23 +691,6 @@ public class MainActivity extends AppCompatActivity
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
         client.disconnect();
-    }
-
-    private int getLastVisibleItemPosition() {
-        return mLinearLayoutManager.findLastVisibleItemPosition();
-    }
-
-    private void setRecyclerViewScrollListener() {
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                int totalItemCount = mRecyclerView.getLayoutManager().getItemCount();
-                if (totalItemCount == getLastVisibleItemPosition() + 1) {
-                    // requestPhoto(); // TODO
-                }
-            }
-        });
     }
 
 }

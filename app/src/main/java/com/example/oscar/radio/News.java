@@ -149,4 +149,12 @@ public class News {
         }
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj.getClass() == this.getClass()) {
+            return this.link.equals(((News) obj).link);
+        } else {
+            return false;
+        }
+    }
 }

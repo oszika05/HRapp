@@ -39,6 +39,9 @@
         <include layout="@layout/content_music"
             android:id="@+id/t4"
             android:visibility="gone"/>
+        <include layout="@layout/content_news"
+            android:id="@+id/t5"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

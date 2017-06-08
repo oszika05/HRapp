@@ -83,11 +83,15 @@ class Globals {
     public List<Program> programs = new ArrayList<Program>();
     public List<MusicTitle> songs = new ArrayList<MusicTitle>();
     public List<News> news = new ArrayList<News>();
+    public List<List<News>> newsRaw = new ArrayList<List<News>>();
     public MusicAdapter musicAdapter;
     public ProgramAdapter programAdapter[] = new ProgramAdapter[7];
+    public RecyclerAdapter newsAdapter[] = new RecyclerAdapter[2];
+    public RecyclerAdapter mainNewsAdapter;
     public SwipeRefreshLayout musicSwipeContainer;
     public SwipeRefreshLayout programSwipeContainer[] = new SwipeRefreshLayout[7];
     public SwipeRefreshLayout mainSwipeContainer;
+    public SwipeRefreshLayout newsSwipeContainer[] = new SwipeRefreshLayout[2];
     public ImageView musicCardImage;
     public ImageView programCardImage;
     public NotificationCompat.Builder notifBuilder;
@@ -96,7 +100,6 @@ class Globals {
     public boolean restartNeeded = false;
     public AppBarLayout appBarLayout;
     public TabLayout tabLayout;
-    public RecyclerAdapter newsAdapter;
     public int theme;
 
     // TEMP
