@@ -573,7 +573,7 @@ public class MainActivity extends AppCompatActivity
 
             if(Globals.getInstance().news.size() == 0) {  // the list is not yet loaded
                 for(int i = 0; i < 2; ++i)
-                    Globals.getInstance().newsSwipeContainer[i].setRefreshing(true);  // the refreshing icon TODO error here
+                    ;// Globals.getInstance().newsSwipeContainer[i].setRefreshing(true);  // the refreshing icon TODO error here TODO TODO
 
                 //Globals.getInstance().radioService.downloadHtml();    // getting the programs
                 Globals.getInstance().newsAdapter[0].getNews();
