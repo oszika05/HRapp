@@ -16,6 +16,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.microedition.khronos.opengles.GL;
 
 
 public class NewsFragment extends Fragment {
@@ -61,7 +64,13 @@ public class NewsFragment extends Fragment {
         newsRecyclerView = (RecyclerView) rootView.findViewById(R.id.newsRecyclerView);
         newsLinearLayoutManager = new LinearLayoutManager(getContext()); // TODO ??
         newsRecyclerView.setLayoutManager(newsLinearLayoutManager);
-        Globals.getInstance().newsAdapter[index] = new RecyclerAdapter((ArrayList<News>) Globals.getInstance().newsRaw.get(index));
+        if (Globals.getInstance().newsAdapter[index] == null) {
+            //Globals.getInstance().newsAdapter.add(new RecyclerAdapter());
+            if (Globals.getInstance().newsRaw.size() <= index) {
+                Globals.getInstance().newsRaw.add(new ArrayList<News>());
+            }
+            Globals.getInstance().newsAdapter[index] = new RecyclerAdapter((ArrayList<News>) Globals.getInstance().newsRaw.get(index));
+        }
         newsRecyclerView.setAdapter(Globals.getInstance().newsAdapter[index]);
         setRecyclerViewScrollListener();
         Log.d("INIT", "init: recView");
@@ -77,7 +86,7 @@ public class NewsFragment extends Fragment {
                 // once the network request has completed successfully.
 
                 try {
-                    if(Globals.getInstance().isNetworkOnline())
+                    if (Globals.getInstance().isNetworkOnline())
                         Globals.getInstance().newsAdapter[0].getNews();
                 } catch (NullPointerException e) {
                     Globals.getInstance().newsSwipeContainer[finalIndex].setRefreshing(false);

@@ -538,45 +538,51 @@ public class MainActivity extends AppCompatActivity
                 return false;
             }
 
-            TabLayout tabLayout = (TabLayout) findViewById(R.id.news_tab_layout);
-            tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+            try {
 
-            // Removing tabs
-            tabLayout.removeAllTabs();
+                TabLayout tabLayout = (TabLayout) findViewById(R.id.news_tab_layout);
+                tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-            // Adding Tabs
-            tabLayout.addTab(tabLayout.newTab().setText("Hitéleti hírek"));
-            tabLayout.addTab(tabLayout.newTab().setText("Rádiós hírek"));
+                // Removing tabs
+                tabLayout.removeAllTabs();
+
+                // Adding Tabs
+                tabLayout.addTab(tabLayout.newTab().setText("Hitéleti hírek"));
+                tabLayout.addTab(tabLayout.newTab().setText("Rádiós hírek"));
 
 
-            final ViewPager viewPager = (ViewPager) findViewById(R.id.newsPager);
-            final NewsPagerAdapter adapter = new NewsPagerAdapter
-                    (getSupportFragmentManager());
-            viewPager.setAdapter(adapter);
-            viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-            tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                @Override
-                public void onTabSelected(TabLayout.Tab tab) {
-                    viewPager.setCurrentItem(tab.getPosition());
+                final ViewPager viewPager = (ViewPager) findViewById(R.id.newsPager);
+                final NewsPagerAdapter adapter = new NewsPagerAdapter
+                        (getSupportFragmentManager());
+                viewPager.setAdapter(adapter);
+                viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+                tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        viewPager.setCurrentItem(tab.getPosition());
+                    }
+
+                    @Override
+                    public void onTabUnselected(TabLayout.Tab tab) {
+
+                    }
+
+                    @Override
+                    public void onTabReselected(TabLayout.Tab tab) {
+
+                    }
+                });
+
+                if (Globals.getInstance().news.size() == 0) {  // the list is not yet loaded
+                    for (int i = 0; i < 2; ++i)
+                        ;// Globals.getInstance().newsSwipeContainer[i].setRefreshing(true);  // the refreshing icon TODO error here TODO TODO
+
+                    //Globals.getInstance().radioService.downloadHtml();    // getting the programs
+                    //Globals.getInstance().newsAdapter[0].getNews();
                 }
 
-                @Override
-                public void onTabUnselected(TabLayout.Tab tab) {
-
-                }
-
-                @Override
-                public void onTabReselected(TabLayout.Tab tab) {
-
-                }
-            });
-
-            if(Globals.getInstance().news.size() == 0) {  // the list is not yet loaded
-                for(int i = 0; i < 2; ++i)
-                    ;// Globals.getInstance().newsSwipeContainer[i].setRefreshing(true);  // the refreshing icon TODO error here TODO TODO
-
-                //Globals.getInstance().radioService.downloadHtml();    // getting the programs
-                Globals.getInstance().newsAdapter[0].getNews();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
             }
 
             changeViewVisibility(R.id.t5);

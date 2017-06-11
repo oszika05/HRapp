@@ -35,9 +35,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.NewsHo
         isLastPage = value;
     }
 
-    public RecyclerAdapter() {
-        super();
-    }
 
     public static class NewsHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView title;
