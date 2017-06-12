@@ -16,7 +16,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -44,6 +46,7 @@ import android.view.MenuItem;
 import android.media.AudioManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -129,7 +132,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onClick(View v) {
-                Globals.getInstance().setTheme();
+                // Globals.getInstance().setTheme();
 
 
 
@@ -175,8 +178,6 @@ public class MainActivity extends AppCompatActivity
                 if (Globals.getInstance().loadBar != null)
                     Globals.getInstance().loadBar.dismiss();
 
-                // new HTMLNewsDownloader().execute();
-                Globals.getInstance().newsAdapter[0].getNews();
 
                 if (!Globals.getInstance().playing) {
                     if (!Globals.getInstance().isNetworkOnline()) {
@@ -184,9 +185,14 @@ public class MainActivity extends AppCompatActivity
                         return;
                     }
 
-                    if (Globals.getInstance().programs.size()==0)
-                        Globals.getInstance().programAdapter[0].getPrograms();
-                        // Globals.getInstance().radioService.downloadHtml();    // this refreshes the programs
+                    if (Globals.getInstance().programs.size()==0) {
+                        if (Globals.getInstance().programAdapter[0] != null) {
+                            Globals.getInstance().programAdapter[0].getPrograms();
+                        } else {
+                            new HTMLDownloader().execute();
+                        }
+
+                    }
 
 
                     if(!Globals.getInstance().finishedLoading)
@@ -313,6 +319,39 @@ public class MainActivity extends AppCompatActivity
         // Configure the refreshing colors
         Globals.getInstance().refreshSwypeContainerColor();
 
+/*
+        // get the bottom sheet view
+        LinearLayout llBottomSheet = (LinearLayout) findViewById(R.id.bottom_sheet);
+        Log.d("NULL-E", "init: " + (llBottomSheet == null ? "NULL" : "NEM NULL"));
+
+
+// init the bottom sheet behavior
+        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet);
+
+// change the state of the bottom sheet
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+// set the peek height
+        bottomSheetBehavior.setPeekHeight(340);
+
+// set hideable or not
+        bottomSheetBehavior.setHideable(false);
+
+// set callback for changes
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+*/
 
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);  // the volume control is controlling the media playback, not he ringtone
@@ -419,6 +458,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_radio) {
+
+
 
             changeViewVisibility(R.id.t1);
         } else if (id == R.id.nav_program) {
