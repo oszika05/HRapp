@@ -2,6 +2,7 @@ package com.example.oscar.radio;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,7 @@ public class ProgramAdapter extends BaseAdapter {
     private ListView list;
     private static boolean first = true;
     private static HTMLDownloader downloader = null;
+    private static int current = 0;
 
     private LayoutInflater mInflater;
 
@@ -67,6 +69,13 @@ public class ProgramAdapter extends BaseAdapter {
         holder.txtTime.setText(searchArrayList.get(position).getTimeStr());
         holder.txtDate.setText(searchArrayList.get(position).getDayStr());
 
+        if (position == current) {
+            holder.txtArtist.setTypeface(null, Typeface.BOLD);
+            holder.txtDate.setTypeface(null, Typeface.BOLD);
+            holder.txtTime.setTypeface(null, Typeface.BOLD);
+            holder.txtTitle.setTypeface(null, Typeface.BOLD);
+        }
+
         holder.item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,7 +113,16 @@ public class ProgramAdapter extends BaseAdapter {
             }
         }
 
+        for (int i = 0; i < searchArrayList.size(); i++) {
+            if (searchArrayList.get(i).isPlayingNow()) {
+                current = i;
+                break;
+            }
+        }
+
         notifyDataSetChanged();
+
+
 
         if(first) {
             goToCurrItem();

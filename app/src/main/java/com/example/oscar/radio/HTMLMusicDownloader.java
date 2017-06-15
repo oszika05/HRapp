@@ -100,8 +100,12 @@ public class HTMLMusicDownloader extends AsyncTask<Integer, Void, List<MusicTitl
             @Override
             public void run() {
                 try {
-                    if (Globals.getInstance().songs.indexOf(songs.get(0)) + 1 == Globals.getInstance().songs.indexOf(songs.get(1))) {
-                        Globals.getInstance().songs = songs;
+                    if(songs.size() > 1) {
+                        if (Globals.getInstance().songs.indexOf(songs.get(0)) + 1 == Globals.getInstance().songs.indexOf(songs.get(1))) {
+                            Globals.getInstance().songs = songs;
+                        } else {
+                            Globals.getInstance().songs.addAll(songs);
+                        }
                     } else {
                         Globals.getInstance().songs.addAll(songs);
                     }

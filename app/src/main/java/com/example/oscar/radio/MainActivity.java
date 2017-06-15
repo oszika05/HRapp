@@ -513,11 +513,17 @@ public class MainActivity extends AppCompatActivity
             }
 
             if(Globals.getInstance().programs.size() == 0) {  // the list is not yet loaded
-                for(int i=0; i<7; ++i)
-                    Globals.getInstance().programSwipeContainer[i].setRefreshing(true);  // the refreshing icon TODO error here
+                for(int i=0; i<7; ++i) {
+                    if (Globals.getInstance().programSwipeContainer[i] != null) {
+                        Globals.getInstance().programSwipeContainer[i].setRefreshing(true);  // the refreshing icon TODO error here
+                    }
+                }
 
-                //Globals.getInstance().radioService.downloadHtml();    // getting the programs
-                Globals.getInstance().programAdapter[0].getPrograms();
+                if (Globals.getInstance().programAdapter[0] != null) {     // getting the programs
+                    Globals.getInstance().programAdapter[0].getPrograms();
+                } else {
+                    Globals.getInstance().radioService.downloadHtml();
+                }
             }
 
 

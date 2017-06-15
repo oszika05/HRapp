@@ -267,7 +267,7 @@ class Globals {
         notifBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(ctx)
                 .setContentTitle(musicTitle)
                 .setContentText(musicDesc)
-                .setSmallIcon(R.drawable.ic_play)
+                //.setSmallIcon(R.drawable.ic_play)
                 .setContentIntent(pendingIntent);
 
 
