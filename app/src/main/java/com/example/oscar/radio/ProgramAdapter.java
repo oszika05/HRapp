@@ -15,7 +15,13 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static android.support.v4.content.ContextCompat.startActivity;
 
@@ -34,6 +40,40 @@ public class ProgramAdapter extends BaseAdapter {
         mInflater = LayoutInflater.from(context);
         this.day = day;
         this.list = list;
+
+        try {
+            highlightCurrentItem();
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+
+        setTimer();
+
+
+    }
+
+    private void setTimer() { // highlights
+        Timer timer = new Timer();
+
+        Calendar cal = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
+                Calendar.getInstance().get(Calendar.MINUTE) < 31 ? 31 : 1);
+        Date date = cal.getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd - dd:mm");
+        Log.d("DATE", "setTimer: " + sdf.format(date));
+
+        timer.schedule(new TimerTask() {   // TODO: test this in action
+
+            @Override
+            public void run() {
+                Globals.getInstance().mainActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        refresh();
+                        Log.d("run", "run: RUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUN"); // it's okay
+                    }
+                });
+            }
+        }, date, 1800000); // 30 min = 1 800 000 ms
     }
 
     public int getCount() {
@@ -70,10 +110,9 @@ public class ProgramAdapter extends BaseAdapter {
         holder.txtDate.setText(searchArrayList.get(position).getDayStr());
 
         if (position == current) {
-            holder.txtArtist.setTypeface(null, Typeface.BOLD);
-            holder.txtDate.setTypeface(null, Typeface.BOLD);
-            holder.txtTime.setTypeface(null, Typeface.BOLD);
             holder.txtTitle.setTypeface(null, Typeface.BOLD);
+        } else {
+            holder.txtTitle.setTypeface(null, Typeface.NORMAL);
         }
 
         holder.item.setOnClickListener(new View.OnClickListener() {
@@ -113,12 +152,7 @@ public class ProgramAdapter extends BaseAdapter {
             }
         }
 
-        for (int i = 0; i < searchArrayList.size(); i++) {
-            if (searchArrayList.get(i).isPlayingNow()) {
-                current = i;
-                break;
-            }
-        }
+        highlightCurrentItem();
 
         notifyDataSetChanged();
 
@@ -127,6 +161,16 @@ public class ProgramAdapter extends BaseAdapter {
         if(first) {
             goToCurrItem();
         }
+    }
+
+    public void highlightCurrentItem() {
+        for (int i = 0; i < searchArrayList.size(); i++) {
+            if (searchArrayList.get(i).isPlayingNow()) {
+                current = i;
+                break;
+            }
+        }
+
     }
 
     public void getPrograms() {

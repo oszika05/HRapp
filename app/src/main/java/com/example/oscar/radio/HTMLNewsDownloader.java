@@ -46,7 +46,7 @@ public class HTMLNewsDownloader extends AsyncTask<Integer, Void, List<List<News>
     }
 
     private List<News> mergeNews(List<News> news1, List<News> news2) {
-        if(news2 == null) {
+        if(news2 == null || news2.size() == 0) {
             return news1;
         }
 
