@@ -27,9 +27,12 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <include layout="@layout/content_main"
+        <include layout="@layout/content_main_new"
             android:id="@+id/t1"
             android:visibility="visible"/>
+        <include layout="@layout/content_main"
+            android:id="@+id/tAAA"
+            android:visibility="gone"/>
         <include layout="@layout/content_program"
             android:id="@+id/t2"
             android:visibility="gone"/>

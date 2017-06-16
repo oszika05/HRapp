@@ -32,6 +32,7 @@ public class ProgramAdapter extends BaseAdapter {
     private static boolean first = true;
     private static HTMLDownloader downloader = null;
     private static int current = 0;
+    private boolean isCurrentDay = false;
 
     private LayoutInflater mInflater;
 
@@ -54,11 +55,21 @@ public class ProgramAdapter extends BaseAdapter {
 
     private void setTimer() { // highlights
         Timer timer = new Timer();
+        Log.d("DAY", "setTimer: monday: " + Calendar.MONDAY);
+        Log.d("DAY", "setTimer: sunday: " + Calendar.SUNDAY);
+        Log.d("DAY", "setTimer: monday: " + Calendar.TUESDAY);
+        Log.d("DAY", "setTimer: sunday: " + Calendar.FRIDAY);
 
-        Calendar cal = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
-                Calendar.getInstance().get(Calendar.MINUTE) < 31 ? 31 : 1);
+        boolean isHalf = Calendar.getInstance().get(Calendar.MINUTE) < 31;
+        isCurrentDay = (day == currentDay());
+
+        Calendar cal = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR),
+                Calendar.getInstance().get(Calendar.MONTH),
+                Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
+                Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + (isHalf ? 0 : 1),
+                isHalf ? 30 : 0, 10);
         Date date = cal.getTime();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd - dd:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd - HH:mm:ss");
         Log.d("DATE", "setTimer: " + sdf.format(date));
 
         timer.schedule(new TimerTask() {   // TODO: test this in action
@@ -68,12 +79,20 @@ public class ProgramAdapter extends BaseAdapter {
                 Globals.getInstance().mainActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        isCurrentDay = (day == currentDay());
                         refresh();
                         Log.d("run", "run: RUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUN"); // it's okay
                     }
                 });
             }
         }, date, 1800000); // 30 min = 1 800 000 ms
+    }
+
+    private int currentDay() {
+        int day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1;
+        if (day == 0) day = 7;
+
+        return day;
     }
 
     public int getCount() {
@@ -109,7 +128,7 @@ public class ProgramAdapter extends BaseAdapter {
         holder.txtTime.setText(searchArrayList.get(position).getTimeStr());
         holder.txtDate.setText(searchArrayList.get(position).getDayStr());
 
-        if (position == current) {
+        if (position == current && isCurrentDay) {
             holder.txtTitle.setTypeface(null, Typeface.BOLD);
         } else {
             holder.txtTitle.setTypeface(null, Typeface.NORMAL);
