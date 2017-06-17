@@ -113,7 +113,7 @@ public class HTMLDownloader extends AsyncTask<Void, Void, List<Program>> {
         try {
             Globals.getInstance().programCard.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View v) { // TODO: musiccard here
                     Program curr = null;
 
                     for(Program p : programs) {

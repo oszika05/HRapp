@@ -24,6 +24,7 @@ import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.util.TypedValue;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -78,8 +79,8 @@ class Globals {
     public boolean finishedLoading;
     public Snackbar loadBar;
     public Snackbar errBar;
-    public CardView musicCard;
-    public CardView programCard;
+    public LinearLayout musicCard;
+    public LinearLayout programCard;
     public List<Program> programs = new ArrayList<Program>();
     public List<MusicTitle> songs = new ArrayList<MusicTitle>();
     public List<News> news = new ArrayList<News>();

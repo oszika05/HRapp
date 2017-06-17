@@ -32,6 +32,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -89,19 +91,49 @@ public class MainActivity extends AppCompatActivity
 
         Globals.getInstance().appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
 
+        ((NavigationView) findViewById(R.id.nav_view)).setCheckedItem(R.id.nav_radio);
+
         Globals.getInstance().mainSwipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer_main);
         if(Globals.getInstance().isNetworkOnline())
             Globals.getInstance().mainSwipeContainer.setRefreshing(true); // the first init
         Globals.getInstance().mainSwipeContainer.setEnabled(true);
 
-        Globals.getInstance().titleText = (TextView) findViewById(R.id.title);
-        Globals.getInstance().artistText = (TextView) findViewById(R.id.artist);
-        Globals.getInstance().programText = (TextView) findViewById(R.id.programTitle);
-        Globals.getInstance().programDescText = (TextView) findViewById(R.id.programDescription);
-        Globals.getInstance().musicCardImage = (ImageView) findViewById(R.id.thumbnail_music);
-        Globals.getInstance().programCardImage = (ImageView) findViewById(R.id.thumbnail_program);
-        Globals.getInstance().musicCard = (CardView) findViewById(R.id.card_view_music);
-        Globals.getInstance().programCard = (CardView) findViewById(R.id.card_view_program);
+        Globals.getInstance().titleText = (TextView) findViewById(R.id.musicTitle); // changed
+        Globals.getInstance().artistText = (TextView) findViewById(R.id.musicArtist); // changed
+        Globals.getInstance().programText = (TextView) findViewById(R.id.programTitle); // working
+        Globals.getInstance().programDescText = (TextView) findViewById(R.id.programType); // changed
+        Globals.getInstance().musicCardImage = (ImageView) findViewById(R.id.thumbnail_music); // not used
+        Globals.getInstance().programCardImage = (ImageView) findViewById(R.id.thumbnail_program); // not used
+        Globals.getInstance().musicCard = (LinearLayout) findViewById(R.id.musicLL); // changed
+        Globals.getInstance().programCard = (LinearLayout) findViewById(R.id.programLL);
+
+        Globals.getInstance().titleText.setMovementMethod(new LinkMovementMethod()); // TODO (original: ScrollMovem....)
+
+        Globals.getInstance().musicCard.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if(!Globals.getInstance().isNetworkOnline()) {
+                    Globals.getInstance().errBar = Snackbar.make(findViewById(R.id.drawer_layout), "Hiba! Ellenőrizze az internetkapcsolatát!", Snackbar.LENGTH_LONG);
+                    Globals.getInstance().errBar.show();
+                }
+
+                Globals.getInstance().musicAdapter = new MusicAdapter(getApplicationContext(), (ArrayList<MusicTitle>) Globals.getInstance().songs);
+
+                songsListView = (ListView) findViewById(R.id.music_list);
+                songsListView.setAdapter(Globals.getInstance().musicAdapter);
+
+                if(Globals.getInstance().songs.size() == 0) {  // the list is not yet loaded TODO no internet
+                    Globals.getInstance().musicSwipeContainer.setRefreshing(true);  // the refreshing icon
+
+                    //Globals.getInstance().radioService.refreshSongsHTML();
+                    Globals.getInstance().musicAdapter.getSongs();
+                }
+
+                ((NavigationView) findViewById(R.id.nav_view)).setCheckedItem(R.id.nav_music);
+                changeViewVisibility(R.id.t4);
+            }
+        });
 
         Globals.getInstance().finishedLoading = true;
 
