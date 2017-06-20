@@ -217,15 +217,6 @@ public class MainActivity extends AppCompatActivity
                         return;
                     }
 
-                    if (Globals.getInstance().programs.size()==0) {
-                        if (Globals.getInstance().programAdapter[0] != null) {
-                            Globals.getInstance().programAdapter[0].getPrograms();
-                        } else {
-                            new HTMLDownloader().execute();
-                        }
-
-                    }
-
 
                     if(!Globals.getInstance().finishedLoading)
                         return;
@@ -249,12 +240,36 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        TextView showAllNews = (TextView) findViewById(R.id.main_news_show_more_button);
+        showAllNews.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavigationView mMenu = (NavigationView) findViewById(R.id.nav_view);
+                mMenu.setCheckedItem(R.id.nav_news);
+                MenuItem mItem = mMenu.getMenu().findItem(R.id.nav_news);
+                onNavigationItemSelected(mItem);
+            }
+        });
+
+        // getting the programs
+        if (Globals.getInstance().programs.size()==0) {
+            if (Globals.getInstance().programAdapter[0] != null) {
+                Globals.getInstance().programAdapter[0].getPrograms();
+            } else {
+                new HTMLDownloader().execute();
+            }
+
+        }
+
+
         // mainNews list
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        mLinearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView = (RecyclerView) findViewById(R.id.small_news_recyclerview);
+        mLinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        Globals.getInstance().news = new ArrayList<News>();
-        Globals.getInstance().mainNewsAdapter = new RecyclerAdapter((ArrayList<News>) Globals.getInstance().news);
+        if (Globals.getInstance().news == null)
+            Globals.getInstance().news = new ArrayList<News>();
+
+        Globals.getInstance().mainNewsAdapter = new MainRecyclerAdapter((ArrayList<News>) Globals.getInstance().news);
         mRecyclerView.setAdapter(Globals.getInstance().mainNewsAdapter);
 
         CardView face = (CardView) findViewById(R.id.card_view_facebook);

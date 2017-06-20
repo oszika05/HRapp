@@ -88,7 +88,7 @@ class Globals {
     public MusicAdapter musicAdapter;
     public ProgramAdapter programAdapter[] = new ProgramAdapter[7];
     public RecyclerAdapter newsAdapter[] = new RecyclerAdapter[2];
-    public RecyclerAdapter mainNewsAdapter;
+    public MainRecyclerAdapter mainNewsAdapter;
     public SwipeRefreshLayout musicSwipeContainer;
     public SwipeRefreshLayout programSwipeContainer[] = new SwipeRefreshLayout[7];
     public SwipeRefreshLayout mainSwipeContainer;

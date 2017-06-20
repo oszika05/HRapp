@@ -38,8 +38,6 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
 
     public static class MainNewsHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView title;
-        private TextView date;
-        private TextView desc;
         private ImageView image;
         private News news;
 
@@ -48,8 +46,6 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
             super(v);
 
             title = (TextView) v.findViewById(R.id.news_title);
-            date = (TextView) v.findViewById(R.id.news_date);
-            desc = (TextView) v.findViewById(R.id.news_desc);
             image = (ImageView) v.findViewById(R.id.thumbnail_news);
             v.setOnClickListener(this);
         }
@@ -58,8 +54,6 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
             this.news = news;
             Picasso.with(image.getContext()).load(news.getPicture()).into(image);
             title.setText(news.getTitle());
-            date.setText(news.getDate());
-            desc.setText(news.getContent());
         }
 
         @Override
@@ -112,7 +106,7 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
     @Override
     public MainRecyclerAdapter.MainNewsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View inflatedView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.news_list_layout, parent, false);
+                .inflate(R.layout.main_news_list_layout, parent, false);
         return new MainRecyclerAdapter.MainNewsHolder(inflatedView);
     }
 

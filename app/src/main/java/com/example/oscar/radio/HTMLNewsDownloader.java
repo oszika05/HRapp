@@ -100,6 +100,7 @@ public class HTMLNewsDownloader extends AsyncTask<Integer, Void, List<List<News>
 
     @Override
     protected List<List<News>> doInBackground(Integer[] params) {
+        Log.d("BBB", "doInBackground: BBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         int page = params[0];
         List<News> news = new ArrayList<News>();    // creating a new list
         List<List<News>> newsArray = new ArrayList<List<News>>();
@@ -148,11 +149,13 @@ public class HTMLNewsDownloader extends AsyncTask<Integer, Void, List<List<News>
 
                     if(hasSomethingChanged) {
                         Globals.getInstance().news = mergeNews(Globals.getInstance().newsRaw);
-                        Globals.getInstance().newsAdapter[0].refresh((ArrayList<News>) Globals.getInstance().newsRaw.get(0));
-                        Globals.getInstance().newsAdapter[1].refresh((ArrayList<News>) Globals.getInstance().newsRaw.get(1));
+                        if(Globals.getInstance().newsAdapter[0] != null && Globals.getInstance().newsAdapter[1] != null) {
+                            Globals.getInstance().newsAdapter[0].refresh((ArrayList<News>) Globals.getInstance().newsRaw.get(0));
+                            Globals.getInstance().newsAdapter[1].refresh((ArrayList<News>) Globals.getInstance().newsRaw.get(1));
+                        }
                         int s = Globals.getInstance().news.size() < 5 ? Globals.getInstance().news.size() : 5;
                         Log.d("S", "run: S: " + s);
-                        Globals.getInstance().mainNewsAdapter.refresh((ArrayList<News>) Globals.getInstance().news.subList(0, s));
+                        Globals.getInstance().mainNewsAdapter.refresh((ArrayList<News>) Globals.getInstance().news);
                     }
 
                     Globals.getInstance().newsSwipeContainer[0].setRefreshing(false);
