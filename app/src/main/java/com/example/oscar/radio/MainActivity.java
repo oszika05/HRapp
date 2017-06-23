@@ -272,7 +272,7 @@ public class MainActivity extends AppCompatActivity
 
         Globals.getInstance().mainNewsAdapter = new MainRecyclerAdapter((ArrayList<News>) Globals.getInstance().news);
         mRecyclerView.setAdapter(Globals.getInstance().mainNewsAdapter);
-
+/*
         CardView face = (CardView) findViewById(R.id.card_view_facebook);
         face.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -323,6 +323,8 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+
+        */
 
         Globals.getInstance().musicSwipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer_music);
         // Setup refresh listener which triggers new data loading
