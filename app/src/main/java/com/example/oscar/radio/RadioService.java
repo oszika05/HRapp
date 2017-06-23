@@ -158,14 +158,11 @@ public class RadioService extends Service {
     public void refreshMetaData() {
 
         Log.d("AAA", "refreshMetaData: AAAAA STAART");
-
-        if(Globals.getInstance().playing) {
-            try {
-                if (Globals.getInstance().isNetworkOnline())
-                    new DownloadTitle().execute(Globals.getInstance().url);
-            } catch (NullPointerException e) {
-                // it's ok
-            }
+        try {
+            if (Globals.getInstance().isNetworkOnline())
+                new DownloadTitle().execute(Globals.getInstance().url);
+        } catch (NullPointerException e) {
+            // it's ok
         }
 
         Log.d("AAA", "refreshMetaData: AAAAA STAART 222222222");
@@ -178,15 +175,14 @@ public class RadioService extends Service {
 
                 Log.d("AAA", "run: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
 
-                if(Globals.getInstance().playing) {
+                if (Globals.getInstance().playing) {
                     try {
-                        if(Globals.getInstance().isNetworkOnline())
+                        if (Globals.getInstance().isNetworkOnline())
                             new DownloadTitle().execute(Globals.getInstance().url);
                     } catch (NullPointerException e) {
                         // It's ok'
                     }
                 }
-
                 Globals.getInstance().handler.postDelayed(this, Globals.getInstance().TEN_SECONDS);
             }
         }, Globals.getInstance().TEN_SECONDS);

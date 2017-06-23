@@ -279,10 +279,10 @@ class Globals {
         notifBuilder.mActions.clear();
 
         if(play) {
-            notifBuilder.addAction(R.drawable.ic_pause, "Pause", pIntent);
+            notifBuilder.addAction(R.drawable.ic_pause, "Leállítás", pIntent);
             notifBuilder.setSmallIcon(R.drawable.ic_play);
         } else {
-            notifBuilder.addAction(R.drawable.ic_play, "Play", pIntent);
+            notifBuilder.addAction(R.drawable.ic_play, "Lejátszás", pIntent);
             notifBuilder.setSmallIcon(R.drawable.ic_pause);
         }
 
@@ -290,6 +290,10 @@ class Globals {
     }
 
     public void setNotifText(String Title, String Text) {
+
+        if(notifBuilder == null)
+            return;
+        
         notifBuilder.setContentTitle(Title);
         notifBuilder.setContentText(Text);
 

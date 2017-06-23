@@ -44,7 +44,6 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
 
         public MainNewsHolder(View v) {
             super(v);
-
             title = (TextView) v.findViewById(R.id.news_title);
             image = (ImageView) v.findViewById(R.id.thumbnail_news);
             v.setOnClickListener(this);
@@ -54,6 +53,21 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
             this.news = news;
             Picasso.with(image.getContext()).load(news.getPicture()).into(image);
             title.setText(news.getTitle());
+            title.post(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d("LINE", "bindNews: 00000000000\t" + title.getLineCount());
+                    title.setMinLines(title.getLineCount() + 1);
+                    title.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            Log.d("LINE", "bindNews: 11111111111\t" + title.getLineCount());
+                        }
+                    });
+                }
+            });
+
         }
 
         @Override

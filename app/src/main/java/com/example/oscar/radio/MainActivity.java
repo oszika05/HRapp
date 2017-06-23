@@ -449,8 +449,10 @@ public class MainActivity extends AppCompatActivity
 
         init();
 
+        Globals.getInstance().radioService.refreshMetaData(); // this refreshes the metadata in every 2 sec
+
+
         if(!Globals.getInstance().playing) {
-            Globals.getInstance().radioService.refreshMetaData(); // this refreshes the metadata in every 2 sec
             if(Globals.getInstance().isNetworkOnline())
                 new HTMLDownloader().execute();
                 // Globals.getInstance().programAdapter[0].getPrograms();
@@ -599,9 +601,6 @@ public class MainActivity extends AppCompatActivity
 
             changeViewVisibility(R.id.t2);
 */
-        } else if (id == R.id.nav_contact) {
-
-            changeViewVisibility(R.id.t3);
         } else if (id == R.id.nav_music) {
             if(!Globals.getInstance().isNetworkOnline()) {
                 Globals.getInstance().errBar = Snackbar.make(findViewById(R.id.drawer_layout), "Hiba! Ellenőrizze az internetkapcsolatát!", Snackbar.LENGTH_LONG);

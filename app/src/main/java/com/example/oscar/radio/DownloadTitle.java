@@ -56,8 +56,14 @@ class DownloadTitle extends AsyncTask<String, Void, String> {   // This is a lon
 
             Globals.getInstance().musicTitle = currentProgram.getName();
             Globals.getInstance().musicDesc = currentProgram.getType();     // If there is no music title in the metadata
-            if(Globals.getInstance().musicCard!=null)
-                Globals.getInstance().musicCard.setVisibility(View.GONE);     // hide the music card
+            if(Globals.getInstance().musicCard != null) {
+                int unicodeEmoji1 = 0x1F614;    // pensive face
+                int unicodeEmoji2 = 0x1F61F;    // worried face
+                int unicodeEmoji3 = 0x1F44E;    // dislike
+                Globals.getInstance().titleText.setText("Nincs Adat " + new String(Character.toChars(unicodeEmoji1)));
+                Globals.getInstance().artistText.setText(new String(Character.toChars(unicodeEmoji2)) + new String(Character.toChars(unicodeEmoji3)));
+                // Globals.getInstance().musicCard.setVisibility(View.GONE);     // hide the music card
+            }
 
         } else {
             try {
@@ -76,6 +82,9 @@ class DownloadTitle extends AsyncTask<String, Void, String> {   // This is a lon
                     if (s.contains("-")) {  // just to be sure :)
                         Globals.getInstance().artistText.setText(s.substring(0, s.indexOf("-"))); // this is the main View
                         Globals.getInstance().titleText.setText(s.substring(s.indexOf("-") + 2)); // +1 for the '-' and an other one for the ' '
+                    } else {
+                        Globals.getInstance().titleText.setText(s);
+                        Globals.getInstance().artistText.setText("-");
                     }
                 }
 
