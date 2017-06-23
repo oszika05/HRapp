@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity
         Globals.getInstance().mNotifyMgr = mNotifyMgr;
         Globals.getInstance().mBuilder = mBuilder;
 
-
+/*
         Button themeBtn = (Button) findViewById(R.id.toggleThemeButton);
         themeBtn.setOnClickListener(new View.OnClickListener() {
             private String getThemeName() {
@@ -177,6 +177,7 @@ public class MainActivity extends AppCompatActivity
                 Snackbar.make(v, result, Snackbar.LENGTH_SHORT).show();
             }
         });
+        */
 
 
 
