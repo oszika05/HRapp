@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
@@ -114,6 +116,26 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.NewsHo
     public RecyclerAdapter.NewsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View inflatedView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.news_list_layout, parent, false);
+        final TextView title = (TextView)inflatedView.findViewById(R.id.news_title);
+        final TextView desc = (TextView)inflatedView.findViewById(R.id.news_desc);
+        final TextView date = (TextView)inflatedView.findViewById(R.id.news_date);
+        inflatedView.post(new Runnable() {
+            @Override
+            public void run() {
+                title.setMaxLines(3);
+
+                desc.setMaxLines(4 - title.getLineCount());
+
+                Log.d("LINEEEEEE", "LINES --------\t"+ title.getText() +"\t:\n\ttitle:\t" + title.getLineCount()
+                        + "\n\tdesc:\t" + desc.getLineCount()
+                        + "\n\tdate:\t" + date.getLineCount());
+
+                if(title.getLineCount() == 1 && desc.getLineCount() <= 2) {
+                    date.setMinLines(2);
+                }
+            }
+        });
+
         return new NewsHolder(inflatedView);
     }
 

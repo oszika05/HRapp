@@ -106,8 +106,26 @@ public class HTMLMusicDownloader extends AsyncTask<Integer, Void, List<MusicTitl
                         } else {
                             Globals.getInstance().songs.addAll(songs);
                         }
-                    } else {
-                        Globals.getInstance().songs.addAll(songs);
+                    } else { // TODO placeholder here
+                        // Globals.getInstance().songs.addAll(songs);
+                        MusicTitle dummy0 = new MusicTitle();
+                        dummy0.setTitle("Előadó - Zene");
+                        dummy0.setDate("2017-06-07 13:45");
+                        dummy0.setLink("nope");
+
+                        MusicTitle dummy1 = new MusicTitle();
+                        dummy1.setTitle("Artist - Music");
+                        dummy1.setDate("2017-06-08 11:45");
+                        dummy1.setLink("nope");
+
+                        MusicTitle dummy2 = new MusicTitle();
+                        dummy2.setTitle("This particular song has a really long - artist name, and an also long title (and this is a remix)");
+                        dummy2.setDate("2017-06-10 20:45");
+                        dummy2.setLink("nope");
+
+                        Globals.getInstance().songs.add(dummy0);
+                        Globals.getInstance().songs.add(dummy1);
+                        Globals.getInstance().songs.add(dummy2);
                     }
 
                     Globals.getInstance().musicAdapter.refresh();

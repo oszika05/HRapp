@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -116,7 +117,7 @@ public class ProgramAdapter extends BaseAdapter {
             holder.txtArtist = (TextView) convertView.findViewById(R.id.programListItemDesc);
             holder.txtTime = (TextView) convertView.findViewById(R.id.programListItemTime);
             holder.txtDate = (TextView) convertView.findViewById(R.id.programListItemDay);
-            holder.item = (RelativeLayout) convertView.findViewById(R.id.programListItem);
+            holder.item = (LinearLayout) convertView.findViewById(R.id.programListItem);
 
             convertView.setTag(holder);
         } else {
@@ -125,7 +126,7 @@ public class ProgramAdapter extends BaseAdapter {
 
         holder.txtTitle.setText(searchArrayList.get(position).getName());
         holder.txtArtist.setText(searchArrayList.get(position).getType());
-        holder.txtTime.setText(searchArrayList.get(position).getTimeStr());
+        holder.txtTime.setText(searchArrayList.get(position).getTimeStr().substring(0, searchArrayList.get(position).getTimeStr().indexOf("-") - 1));
         holder.txtDate.setText(searchArrayList.get(position).getDayStr());
 
         if (position == current && isCurrentDay) {
@@ -155,7 +156,7 @@ public class ProgramAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        RelativeLayout item;
+        LinearLayout item;
         TextView txtTitle;
         TextView txtArtist;
         TextView txtTime;

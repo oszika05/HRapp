@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -56,7 +57,7 @@ public class MusicAdapter extends BaseAdapter {
             holder.txtArtist = (TextView) convertView.findViewById(R.id.musicListItemDesc);
             holder.txtTime = (TextView) convertView.findViewById(R.id.musicListItemTime);
             holder.txtDate = (TextView) convertView.findViewById(R.id.musicListItemDate);
-            holder.item = (RelativeLayout) convertView.findViewById(R.id.musicListItem);
+            holder.item = (LinearLayout) convertView.findViewById(R.id.musicListItem);
 
             convertView.setTag(holder);
         } else {
@@ -85,7 +86,7 @@ public class MusicAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        RelativeLayout item;
+        LinearLayout item;
         TextView txtTitle;
         TextView txtArtist;
         TextView txtTime;
