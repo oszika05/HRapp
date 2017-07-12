@@ -78,6 +78,8 @@ public class NewsFragment extends Fragment {
 
         Globals.getInstance().newsSwipeContainer[index] = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeContainer_news);
 
+        Globals.getInstance().newsSwipeContainer[index].setRefreshing( Globals.getInstance().news.size() == 0 );
+
         Globals.getInstance().newsSwipeContainer[index].setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

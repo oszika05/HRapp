@@ -241,13 +241,13 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        TextView showAllNews = (TextView) findViewById(R.id.main_news_show_more_button);
-        showAllNews.setOnClickListener(new View.OnClickListener() {
+        TextView showAllPrograms = (TextView) findViewById(R.id.main_news_show_more_button);
+        showAllPrograms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NavigationView mMenu = (NavigationView) findViewById(R.id.nav_view);
-                mMenu.setCheckedItem(R.id.nav_news);
-                MenuItem mItem = mMenu.getMenu().findItem(R.id.nav_news);
+                mMenu.setCheckedItem(R.id.nav_program);
+                MenuItem mItem = mMenu.getMenu().findItem(R.id.nav_program);
                 onNavigationItemSelected(mItem);
             }
         });
@@ -263,12 +263,10 @@ public class MainActivity extends AppCompatActivity
         }
 
 
-        // mainNews list
+        // mainPrograms list
         mRecyclerView = (RecyclerView) findViewById(R.id.small_news_recyclerview);
         mLinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        if (Globals.getInstance().news == null)
-            Globals.getInstance().news = new ArrayList<News>();
 
         Globals.getInstance().mainNewsAdapter = new MainRecyclerAdapter((ArrayList<Program>) Globals.getInstance().programs);
         mRecyclerView.setAdapter(Globals.getInstance().mainNewsAdapter);
@@ -632,6 +630,10 @@ public class MainActivity extends AppCompatActivity
                 Globals.getInstance().errBar.show();
                 ((DrawerLayout) findViewById(R.id.drawer_layout)).closeDrawers();
                 return false;
+            }
+
+            if (Globals.getInstance().news.size() == 0) {
+                new HTMLNewsDownloader().execute(0);
             }
 
             try {
