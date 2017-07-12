@@ -155,7 +155,6 @@ public class HTMLNewsDownloader extends AsyncTask<Integer, Void, List<List<News>
                         }
                         int s = Globals.getInstance().news.size() < 5 ? Globals.getInstance().news.size() : 5;
                         Log.d("S", "run: S: " + s);
-                        Globals.getInstance().mainNewsAdapter.refresh((ArrayList<News>) Globals.getInstance().news);
                     }
 
                     Globals.getInstance().newsSwipeContainer[0].setRefreshing(false);

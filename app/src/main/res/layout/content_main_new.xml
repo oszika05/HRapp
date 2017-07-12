@@ -20,7 +20,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/hit_hattol_0"
+                app:srcCompat="@drawable/hit_radio_cropped_white"
                 android:scaleType="centerCrop" />
 
         </LinearLayout>
@@ -135,7 +135,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="#DE000000"
                         android:textSize="16sp"
-                        android:text="Hírek" />
+                        android:text="Műsorok" />
 
                     <TextView
                         android:id="@+id/main_news_show_more_button"

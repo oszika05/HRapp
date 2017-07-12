@@ -270,7 +270,7 @@ public class MainActivity extends AppCompatActivity
         if (Globals.getInstance().news == null)
             Globals.getInstance().news = new ArrayList<News>();
 
-        Globals.getInstance().mainNewsAdapter = new MainRecyclerAdapter((ArrayList<News>) Globals.getInstance().news);
+        Globals.getInstance().mainNewsAdapter = new MainRecyclerAdapter((ArrayList<Program>) Globals.getInstance().programs);
         mRecyclerView.setAdapter(Globals.getInstance().mainNewsAdapter);
 /*
         CardView face = (CardView) findViewById(R.id.card_view_facebook);

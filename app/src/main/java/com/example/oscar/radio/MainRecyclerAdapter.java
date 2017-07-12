@@ -23,9 +23,14 @@ import java.util.ArrayList;
  * Created by oszi on 6/6/17.
  */
 
+/*
+    TODO: this is bad
+    but it works
+ */
+
 public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapter.MainNewsHolder> {
-    private ArrayList<News> news;
-    static private HTMLNewsDownloader downloader = null;
+    private ArrayList<Program> news;
+    static private HTMLDownloader downloader = null;
     static private int currentPage = 0; // starts from 0
     static private boolean isLastPage = false;
     public static boolean getIsLastPage() {
@@ -39,7 +44,7 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
     public static class MainNewsHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView title;
         private ImageView image;
-        private News news;
+        private Program news;
 
 
         public MainNewsHolder(View v) {
@@ -49,10 +54,10 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
             v.setOnClickListener(this);
         }
 
-        public void bindNews(News news) {
+        public void bindNews(Program news) {
             this.news = news;
-            Picasso.with(image.getContext()).load(news.getPicture()).into(image);
-            title.setText(news.getTitle());
+            Picasso.with(image.getContext()).load(CoverPhoto.get(news.getName(), false)).into(image);
+            title.setText(news.getName());
             title.post(new Runnable() {
                 @Override
                 public void run() {
@@ -75,44 +80,37 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
             Context context = itemView.getContext();
             Intent newsIntent = new Intent(context, Textactivity.class);
             newsIntent.putExtra("title", news.getType());
-            newsIntent.putExtra("type", news.getTitle());
-            newsIntent.putExtra("desc", "<br /><b>" + news.getContent() + "</b>");
-            newsIntent.putExtra("time", news.getDate());
-            newsIntent.putExtra("picture", news.getPicture());
-            newsIntent.putExtra("contentLoading", true);
-            int n = Globals.getInstance().news.indexOf(news);
-            newsIntent.putExtra("newsN", n);
-            newsIntent.putExtra("newsType", -1);
+            newsIntent.putExtra("type", news.getName());
+            newsIntent.putExtra("desc", "<br /><b>" + news.getDesc() + "</b>");
+            newsIntent.putExtra("time", news.getTimeStr());
+            newsIntent.putExtra("picture", CoverPhoto.get(news.getName(), false));
 
             context.startActivity(newsIntent);
-            Log.d("RecyclerView", "CLICK!");
         }
     }
 
-    public MainRecyclerAdapter(ArrayList<News> news) {
+    public MainRecyclerAdapter(ArrayList<Program> news) {
         getNews();
         this.news = news;
     }
 
-    public void refresh(ArrayList<News> news) {
+    public void refresh(ArrayList<Program> news) {
         this.news = news;
         notifyDataSetChanged();
         Log.d("TAG", "currentPage AFTER: " + currentPage);
     }
 
     public void getNews() {
-        currentPage = 0; // first page
-        isLastPage = false;
         getNextNews();
     }
 
     public void getNextNews() {
         Log.d("LASTPAGE", "getNextNews: " + isLastPage);
         Log.d("PAGE", "getNextNews: lastPage: " + currentPage);
-        if (!isLastPage && (downloader == null || downloader.getStatus() == AsyncTask.Status.FINISHED)) {
-            downloader = new HTMLNewsDownloader();
+        if ((downloader == null || downloader.getStatus() == AsyncTask.Status.FINISHED)) {
+            downloader = new HTMLDownloader();
             Log.d("TAG", "currentPage BEFORE: " + currentPage);
-            downloader.execute(currentPage);
+            downloader.execute();
             currentPage++;
         }
     }
@@ -126,7 +124,7 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
 
     @Override
     public void onBindViewHolder(MainRecyclerAdapter.MainNewsHolder holder, int position) {
-        News newsItem = news.get(position);
+        Program newsItem = news.get(position);
         holder.bindNews(newsItem);
     }
 

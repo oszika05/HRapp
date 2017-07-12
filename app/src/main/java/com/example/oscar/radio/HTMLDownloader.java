@@ -88,6 +88,8 @@ public class HTMLDownloader extends AsyncTask<Void, Void, List<Program>> {
                         }
                     }
 
+                    Globals.getInstance().mainNewsAdapter.refresh((ArrayList<Program>) Globals.getInstance().programs);
+
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
